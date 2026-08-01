@@ -1,0 +1,143 @@
+[
+  {
+    "id": "424",
+    "name": "Amerin Balakong",
+    "format": "DT",
+    "district": "Cheras",
+    "address": "Lot G-12, Amerin Mall, Persiaran Impian Indah, Taman Impian Indah, 43300 Seri Kembangan, Selangor",
+    "coordinates": { "lat": 3.0298, "lng": 101.7513 },
+    "manager": { "name": "Ahmad Farid", "phone": "012-3456789" },
+    "devices": [
+      { "type": "TC", "index": 1, "location": "Front Counter 1", "assetTag": "MY-KV-424-TC-01", "status": "active" },
+      { "type": "TC", "index": 2, "location": "Front Counter 2", "assetTag": "MY-KV-424-TC-02", "status": "active" },
+      { "type": "KVS", "index": 1, "location": "Grill Station", "assetTag": "MY-KV-424-KVS-01", "status": "active" },
+      { "type": "COD", "index": 1, "location": "Drive-Thru Lane 1", "assetTag": "MY-KV-424-COD-01", "status": "active" },
+      { "type": "DT_HEADSET", "index": 1, "location": "DT Cashier", "assetTag": "MY-KV-424-DTH-01", "status": "active" },
+      { "type": "KIOSK", "index": 1, "location": "Entrance Left", "assetTag": "MY-KV-424-KIO-01", "status": "faulty", "notes": "Touch screen occasionally unresponsive" }
+    ],
+    "lastVerified": "2026-07-15T10:00:00Z"
+  },
+  {
+    "id": "312",
+    "name": "Mid Valley",
+    "format": "Mall",
+    "district": "KL",
+    "address": "Lot LG-14, Lower Ground Floor, Mid Valley Megamall, Lingkaran Syed Putra, 59200 Kuala Lumpur",
+    "coordinates": { "lat": 3.1174, "lng": 101.6778 },
+    "manager": { "name": "Sarah Lee", "phone": "016-9876543" },
+    "devices": [
+      { "type": "TC", "index": 1, "location": "Counter 1", "assetTag": "MY-KV-312-TC-01", "status": "active" },
+      { "type": "TC", "index": 2, "location": "Counter 2", "assetTag": "MY-KV-312-TC-02", "status": "active" },
+      { "type": "TC", "index": 3, "location": "Counter 3", "assetTag": "MY-KV-312-TC-03", "status": "active" },
+      { "type": "KVS", "index": 1, "location": "Assembly", "assetTag": "MY-KV-312-KVS-01", "status": "active" },
+      { "type": "BUMP_BAR", "index": 1, "location": "Assembly", "assetTag": "MY-KV-312-BB-01", "status": "replaced" },
+      { "type": "KIOSK", "index": 1, "location": "Main Entrance", "assetTag": "MY-KV-312-KIO-01", "status": "active" },
+      { "type": "KIOSK", "index": 2, "location": "Main Entrance", "assetTag": "MY-KV-312-KIO-02", "status": "active" }
+    ],
+    "lastVerified": "2026-08-01T09:30:00Z"
+  },
+  {
+    "id": "198",
+    "name": "SS15 Subang Jaya",
+    "format": "DT",
+    "district": "Subang",
+    "address": "No 2, Jalan SS15/4D, 47500 Subang Jaya, Selangor",
+    "coordinates": { "lat": 3.0763, "lng": 101.5891 },
+    "manager": { "name": "Nurul Aminah", "phone": "019-8765432" },
+    "devices": [
+      { "type": "TC", "index": 1, "location": "Front Counter", "assetTag": "MY-KV-198-TC-01", "status": "active" },
+      { "type": "KVS", "index": 1, "location": "Kitchen", "assetTag": "MY-KV-198-KVS-01", "status": "active" },
+      { "type": "COD", "index": 1, "location": "DT Order Point", "assetTag": "MY-KV-198-COD-01", "status": "active" },
+      { "type": "DT_HEADSET", "index": 1, "location": "DT Booth", "assetTag": "MY-KV-198-DTH-01", "status": "active" },
+      { "type": "DT_HEADSET", "index": 2, "location": "Manager Office", "assetTag": "MY-KV-198-DTH-02", "status": "active" }
+    ],
+    "lastVerified": "2026-07-20T14:15:00Z"
+  },
+  {
+    "id": "276",
+    "name": "Bukit Bintang",
+    "format": "Standalone",
+    "district": "KL",
+    "address": "120, Jalan Bukit Bintang, 55100 Kuala Lumpur",
+    "coordinates": { "lat": 3.1466, "lng": 101.7104 },
+    "manager": { "name": "Jason Tan", "phone": "011-2233445" },
+    "devices": [
+      { "type": "TC", "index": 1, "location": "Counter 1", "assetTag": "MY-KV-276-TC-01", "status": "active" },
+      { "type": "TC", "index": 2, "location": "Counter 2", "assetTag": "MY-KV-276-TC-02", "status": "active" },
+      { "type": "KVS", "index": 1, "location": "Kitchen Display", "assetTag": "MY-KV-276-KVS-01", "status": "active" },
+      { "type": "KIOSK", "index": 1, "location": "Lobby", "assetTag": "MY-KV-276-KIO-01", "status": "active" },
+      { "type": "SWITCH", "index": 1, "location": "Back Office", "assetTag": "MY-KV-276-SW-01", "status": "active" }
+    ],
+    "lastVerified": "2026-06-10T11:45:00Z"
+  },
+  {
+    "id": "501",
+    "name": "Sunway Pyramid",
+    "format": "Mall",
+    "district": "Petaling Jaya",
+    "address": "OB3.G.1, Sunway Pyramid Shopping Mall, 3 Jalan PJS 11/15, Bandar Sunway, 46150 Petaling Jaya",
+    "coordinates": { "lat": 3.0731, "lng": 101.6067 },
+    "manager": { "name": "Siva Kumar", "phone": "017-6543210" },
+    "devices": [
+      { "type": "TC", "index": 1, "location": "Dessert Kiosk", "assetTag": "MY-KV-501-TC-01", "status": "active" },
+      { "type": "TC", "index": 2, "location": "Main Counter", "assetTag": "MY-KV-501-TC-02", "status": "active" },
+      { "type": "KIOSK", "index": 1, "location": "Entrance A", "assetTag": "MY-KV-501-KIO-01", "status": "active" },
+      { "type": "KIOSK", "index": 2, "location": "Entrance A", "assetTag": "MY-KV-501-KIO-02", "status": "active" },
+      { "type": "KVS_PRES", "index": 1, "location": "Expeditor", "assetTag": "MY-KV-501-KVSP-01", "status": "active" },
+      { "type": "AP", "index": 1, "location": "Dining Area Center", "assetTag": "MY-KV-501-AP-01", "status": "active" }
+    ],
+    "lastVerified": "2026-07-05T16:20:00Z"
+  },
+  {
+    "id": "389",
+    "name": "Bandar Utama",
+    "format": "DT",
+    "district": "Petaling Jaya",
+    "address": "Drive Thru Restaurant, Centrepoint Bandar Utama, 47400 Petaling Jaya, Selangor",
+    "coordinates": { "lat": 3.1388, "lng": 101.6163 },
+    "manager": { "name": "Michelle Wong", "phone": "013-4455667" },
+    "devices": [
+      { "type": "TC", "index": 1, "location": "Counter 1", "assetTag": "MY-KV-389-TC-01", "status": "active" },
+      { "type": "KVS", "index": 1, "location": "Grill", "assetTag": "MY-KV-389-KVS-01", "status": "active" },
+      { "type": "COD", "index": 1, "location": "Drive-Thru 1", "assetTag": "MY-KV-389-COD-01", "status": "active" },
+      { "type": "DT_HEADSET", "index": 1, "location": "DT Station", "assetTag": "MY-KV-389-DTH-01", "status": "faulty", "notes": "Static noise reported" },
+      { "type": "DELPHI", "index": 1, "location": "Comms Rack", "assetTag": "MY-KV-389-DEL-01", "status": "active" }
+    ],
+    "lastVerified": "2026-07-28T08:00:00Z"
+  },
+  {
+    "id": "445",
+    "name": "IOI City Mall",
+    "format": "Mall",
+    "district": "Putrajaya",
+    "address": "LG-102, Lower Ground Floor, IOI City Mall, Lebuh IRC, IOI Resort City, 62502 Putrajaya",
+    "coordinates": { "lat": 2.9714, "lng": 101.7135 },
+    "manager": { "name": "Roslan Bakar", "phone": "014-9988776" },
+    "devices": [
+      { "type": "TC", "index": 1, "location": "Counter 1", "assetTag": "MY-KV-445-TC-01", "status": "active" },
+      { "type": "TC", "index": 2, "location": "Counter 2", "assetTag": "MY-KV-445-TC-02", "status": "active" },
+      { "type": "KVS", "index": 1, "location": "Fry Station", "assetTag": "MY-KV-445-KVS-01", "status": "active" },
+      { "type": "BUMP_BAR", "index": 1, "location": "Fry Station", "assetTag": "MY-KV-445-BB-01", "status": "active" },
+      { "type": "KIOSK", "index": 1, "location": "Lobby Left", "assetTag": "MY-KV-445-KIO-01", "status": "active" },
+      { "type": "KIOSK", "index": 2, "location": "Lobby Right", "assetTag": "MY-KV-445-KIO-02", "status": "active" }
+    ],
+    "lastVerified": "2026-06-25T13:10:00Z"
+  },
+  {
+    "id": "267",
+    "name": "Kepong",
+    "format": "DT",
+    "district": "Kepong",
+    "address": "Lot 25, Jalan Kepong, 52100 Kuala Lumpur",
+    "coordinates": { "lat": 3.2127, "lng": 101.6369 },
+    "manager": { "name": "Vincent Loo", "phone": "018-2211334" },
+    "devices": [
+      { "type": "TC", "index": 1, "location": "Front Counter", "assetTag": "MY-KV-267-TC-01", "status": "active" },
+      { "type": "KVS", "index": 1, "location": "BOP", "assetTag": "MY-KV-267-KVS-01", "status": "active" },
+      { "type": "COD", "index": 1, "location": "Drive-Thru Lane", "assetTag": "MY-KV-267-COD-01", "status": "active" },
+      { "type": "DT_HEADSET", "index": 1, "location": "Cashier Window", "assetTag": "MY-KV-267-DTH-01", "status": "active" },
+      { "type": "DT_HEADSET", "index": 2, "location": "Presenter Window", "assetTag": "MY-KV-267-DTH-02", "status": "active" }
+    ],
+    "lastVerified": "2026-07-30T10:45:00Z"
+  }
+]

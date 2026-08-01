@@ -1,0 +1,50 @@
+[
+  {
+    "segment": "Region",
+    "description": "The country code where the device is located. For Malaysia, this is always MY.",
+    "examples": ["MY"],
+    "pattern": "^MY$"
+  },
+  {
+    "segment": "District",
+    "description": "A 2-letter abbreviation for the geographic district or state within the region. KV represents the Klang Valley.",
+    "examples": ["KV", "PG (Penang)", "JB (Johor Bahru)"],
+    "pattern": "^[A-Z]{2}$"
+  },
+  {
+    "segment": "Store Number",
+    "description": "The unique 3-digit store identifier assigned by corporate.",
+    "examples": ["424 (Amerin Balakong)", "312 (Mid Valley)", "098 (Older store)"],
+    "pattern": "^[0-9]{3}$"
+  },
+  {
+    "segment": "Device Type",
+    "description": "Standardized abbreviation for the hardware type.",
+    "examples": ["TC (Terminal)", "KIO (Kiosk)", "COD (Customer Order Display)"],
+    "pattern": "^[A-Z]{2,4}$"
+  },
+  {
+    "segment": "Index",
+    "description": "A 2-digit sequential number to uniquely identify multiple devices of the same type in one store.",
+    "examples": ["01", "02", "12"],
+    "pattern": "^[0-9]{2}$"
+  },
+  {
+    "segment": "Full Tag Example 1",
+    "description": "Self-Order Kiosk #2 at Mid Valley",
+    "examples": ["MY-KV-312-KIO-02"],
+    "pattern": "MY-[A-Z]{2}-\\d{3}-[A-Z]{2,4}-\\d{2}"
+  },
+  {
+    "segment": "Full Tag Example 2",
+    "description": "Drive-Thru COD #1 at SS15 Subang Jaya",
+    "examples": ["MY-KV-198-COD-01"],
+    "pattern": "MY-[A-Z]{2}-\\d{3}-[A-Z]{2,4}-\\d{2}"
+  },
+  {
+    "segment": "Full Tag Example 3",
+    "description": "POS Terminal #3 at Bukit Bintang",
+    "examples": ["MY-KV-276-TC-03"],
+    "pattern": "MY-[A-Z]{2}-\\d{3}-[A-Z]{2,4}-\\d{2}"
+  }
+]

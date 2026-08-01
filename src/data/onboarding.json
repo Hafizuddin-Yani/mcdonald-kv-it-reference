@@ -1,0 +1,66 @@
+[
+  {
+    "week": 1,
+    "title": "Orientation & Access Setup",
+    "tasks": [
+      "Collect company laptop, phone, and standard tool bag.",
+      "Complete HR onboarding and McDonald's IT security awareness training.",
+      "Set up credentials for Meraki Dashboard, ServiceNow, and VNC Manager.",
+      "Shadow a Senior Field Engineer for 3 days on routine maintenance calls.",
+      "Review the Health and Safety guidelines for kitchen environments."
+    ],
+    "resources": [
+      "IT Security Policy Document",
+      "ServiceNow Beginner's Guide",
+      "Field Engineer Toolkit Checklist"
+    ]
+  },
+  {
+    "week": 2,
+    "title": "Store Formats & Device Taxonomy",
+    "tasks": [
+      "Memorize the standard naming conventions for all store devices.",
+      "Study the differences in IT setup between Drive-Thru, Mall, and Standalone formats.",
+      "Complete the Acrelec Kiosk hardware maintenance module.",
+      "Learn how to safely replace a KVS monitor over a hot fryer.",
+      "Perform a solo site survey to map out network topology of a training store."
+    ],
+    "resources": [
+      "Device Naming Standard Sheet",
+      "Acrelec Service Manual",
+      "KVS Installation Video"
+    ]
+  },
+  {
+    "week": 3,
+    "title": "Basic Ticketing & Site Visits",
+    "tasks": [
+      "Take ownership of low-severity tickets (e.g., Bump Bar replacement, Kiosk paper jams).",
+      "Practice configuring a replacement POS Terminal (TC) in the staging lab.",
+      "Accompany a technician to resolve a Drive-Thru Headset audio issue.",
+      "Learn to pull and analyze logs from a frozen NCR POS terminal.",
+      "Conduct a preventive maintenance run on a high-volume store."
+    ],
+    "resources": [
+      "NewPOS Troubleshooting Guide",
+      "HME EOS HD Manual",
+      "Preventive Maintenance Checklist"
+    ]
+  },
+  {
+    "week": 4,
+    "title": "Network Troubleshooting & Full Autonomy",
+    "tasks": [
+      "Diagnose a simulated network outage on the Delphi test rig.",
+      "Use Meraki Dashboard to identify and bounce a failed PoE port.",
+      "Handle a mix of medium and high severity tickets independently (with remote backup).",
+      "Perform a full NewPOS software upgrade on a lab terminal.",
+      "Pass the Field Engineer Readiness Assessment with the IT Manager."
+    ],
+    "resources": [
+      "Delphi Architecture Diagram",
+      "Meraki Troubleshooting Playbook",
+      "Escalation Matrix"
+    ]
+  }
+]

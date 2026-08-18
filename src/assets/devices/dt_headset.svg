@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160">
+  <rect x="0" y="0" width="240" height="160" rx="10" fill="#F6F5F2"/>
+  <path d="M84 132 A36 36 0 0 1 156 132 Z" fill="#52525B"/>
+  <path d="M84 132 A36 36 0 0 1 156 132 L156 128 A36 36 0 0 0 84 128 Z" fill="#3F3F46"/>
+  <rect x="82" y="108" width="76" height="22" rx="6" fill="#3F3F46"/>
+  <path d="M104 108 Q104 88 120 88 Q136 88 136 108" fill="none" stroke="#A1A1AA" stroke-width="3"/>
+  <circle cx="120" cy="86" r="4" fill="#DA291C"/>
+  <rect x="112" y="132" width="16" height="14" rx="3" fill="#E4E4E7" stroke="#3F3F46" stroke-width="1.5"/>
+  <path d="M120 146 L120 130 M118 142 L122 142" stroke="#A1A1AA" stroke-width="2"/>
+  <rect x="88" y="134" width="64" height="18" rx="9" fill="#DA291C"/>
+  <text x="120" y="147" text-anchor="middle" font-family="monospace" font-size="10" font-weight="700" fill="#FFFFFF">DT HEADSET</text>
+</svg>

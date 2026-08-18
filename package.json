@@ -1,5 +1,5 @@
 {
-  "name": "mcdonald-system-antigravity",
+  "name": "mcd-mykv-it-ref",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,26 +7,29 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
+    "test:parser": "node --experimental-strip-types --no-warnings --experimental-loader ./scripts/svg-loader.mjs ./scripts/parser-tests.ts",
+    "validate": "node --experimental-strip-types --no-warnings --experimental-loader ./scripts/svg-loader.mjs ./scripts/validate-tickets.ts",
+    "gen:icons": "node scripts/gen-icons.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
-    "@tailwindcss/vite": "^4.3.3",
+    "date-fns": "^4.4.0",
     "fuse.js": "^7.5.0",
-    "leaflet": "^1.9.4",
     "lucide-react": "^1.28.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "react-leaflet": "^5.0.0",
-    "react-router": "^8.3.0",
-    "tailwindcss": "^4.3.3"
+    "react-router": "^8.3.0"
   },
   "devDependencies": {
-    "@types/leaflet": "^1.9.21",
     "@types/node": "^24.13.3",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.4",
+    "autoprefixer": "^10.5.4",
     "oxlint": "^1.75.0",
+    "postcss": "^8.5.25",
+    "sharp": "^0.35.3",
+    "tailwindcss": "^3.4.19",
     "typescript": "~6.0.2",
     "vite": "^8.2.0"
   }

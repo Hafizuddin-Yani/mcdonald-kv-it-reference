@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160">
+  <rect x="0" y="0" width="240" height="160" rx="10" fill="#F6F5F2"/>
+  <rect x="72" y="60" width="96" height="64" rx="8" fill="#FFFFFF" stroke="#3F3F46" stroke-width="2"/>
+  <rect x="84" y="44" width="72" height="22" rx="4" fill="#E4E4E7" stroke="#3F3F46" stroke-width="1.5"/>
+  <rect x="96" y="38" width="48" height="12" rx="2" fill="#FFC72C"/>
+  <rect x="84" y="72" width="72" height="26" rx="3" fill="#3F3F46"/>
+  <rect x="84" y="106" width="72" height="4" rx="2" fill="#A1A1AA"/>
+  <rect x="84" y="114" width="30" height="6" rx="2" fill="#DA291C"/>
+  <circle cx="156" cy="117" r="3" fill="#DA291C"/>
+  <rect x="88" y="134" width="64" height="18" rx="9" fill="#DA291C"/>
+  <text x="120" y="147" text-anchor="middle" font-family="monospace" font-size="10" font-weight="700" fill="#FFFFFF">KITCHEN PRINTER</text>
+</svg>

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160">
+  <rect x="0" y="0" width="240" height="160" rx="10" fill="#F6F5F2"/>
+  <rect x="86" y="30" width="68" height="88" rx="8" fill="#FFFFFF" stroke="#3F3F46" stroke-width="2"/>
+  <rect x="94" y="40" width="52" height="12" rx="2" fill="#DA291C"/>
+  <rect x="94" y="58" width="52" height="26" rx="4" fill="#E4E4E7" stroke="#3F3F46" stroke-width="1.5"/>
+  <rect x="100" y="64" width="14" height="14" rx="2" fill="#3F3F46"/>
+  <rect x="120" y="64" width="20" height="14" rx="2" fill="#FFC72C"/>
+  <rect x="94" y="92" width="52" height="8" rx="2" fill="#3F3F46"/>
+  <rect x="94" y="104" width="52" height="6" rx="2" fill="#A1A1AA"/>
+  <path d="M120 110 L120 122" stroke="#A1A1AA" stroke-width="3"/>
+  <path d="M112 120 L120 126 L128 120" stroke="#A1A1AA" stroke-width="3" fill="none"/>
+  <rect x="88" y="134" width="64" height="18" rx="9" fill="#DA291C"/>
+  <text x="120" y="147" text-anchor="middle" font-family="monospace" font-size="10" font-weight="700" fill="#FFFFFF">UPS</text>
+</svg>

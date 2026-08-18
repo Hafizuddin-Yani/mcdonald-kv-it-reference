@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160">
+  <rect x="0" y="0" width="240" height="160" rx="10" fill="#F6F5F2"/>
+  <rect x="78" y="30" width="60" height="44" rx="5" fill="#FFFFFF" stroke="#3F3F46" stroke-width="2"/>
+  <rect x="84" y="36" width="48" height="12" rx="2" fill="#DA291C"/>
+  <rect x="84" y="54" width="48" height="4" rx="2" fill="#D4D4D8"/>
+  <rect x="84" y="62" width="48" height="4" rx="2" fill="#D4D4D8"/>
+  <rect x="88" y="74" width="40" height="6" rx="3" fill="#A1A1AA"/>
+  <rect x="138" y="66" width="34" height="56" rx="4" fill="#FFFFFF" stroke="#3F3F46" stroke-width="2"/>
+  <circle cx="150" cy="80" r="3" fill="#DA291C"/>
+  <circle cx="150" cy="92" r="3" fill="#DA291C"/>
+  <circle cx="150" cy="104" r="3" fill="#DA291C"/>
+  <rect x="143" y="112" width="14" height="6" rx="2" fill="#3F3F46"/>
+  <rect x="66" y="110" width="108" height="14" rx="4" fill="#52525B"/>
+  <rect x="74" y="130" width="92" height="18" rx="9" fill="#DA291C"/>
+  <text x="120" y="143" text-anchor="middle" font-family="monospace" font-size="10" font-weight="700" fill="#FFFFFF">BACK OFFICE PC</text>
+</svg>

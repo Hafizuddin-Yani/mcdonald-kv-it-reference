@@ -1,0 +1,29 @@
+{
+  "name": "McDonald's Malaysia Klang Valley IT Reference",
+  "short_name": "MY-KV IT Ref",
+  "description": "Offline field reference for McDonald's Malaysia Klang Valley IT devices, stores and ticket troubleshooting.",
+  "lang": "en",
+  "start_url": "/McdOpencode/",
+  "scope": "/McdOpencode/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#DA291C",
+  "icons": [
+    {
+      "src": "/McdOpencode/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/McdOpencode/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/McdOpencode/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

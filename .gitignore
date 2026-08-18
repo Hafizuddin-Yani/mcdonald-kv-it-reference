@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Sensitive: raw ticket data (contains personal info)
+src/scripts/input-tickets.txt

@@ -1,231 +1,227 @@
-import React, { useState } from 'react';
 import { Link } from 'react-router';
-import { CheckCircle2, Circle, BookOpen, MapPin, Monitor, Wrench, ShieldAlert } from 'lucide-react';
-import type { OnboardingStep } from '../types';
+import { PageHeader } from '../components/ui/PageHeader';
+import { Card, CardHeader, CardBody } from '../components/ui/Card';
+import { Badge } from '../components/ui/Badge';
+import { Reveal } from '../components/ui/Reveal';
+import { deviceTypes } from '../data/deviceTypes';
+import {
+  ClipboardCheck,
+  Smartphone,
+  Wrench,
+  MessageCircle,
+  BookOpen,
+  Tag,
+  ArrowRight,
+} from 'lucide-react';
 
-import onboardingData from '../data/onboarding.json';
+const checklists = [
+  {
+    title: 'Your First Week',
+    items: [
+      'Get access to the ticketing inbox (email) and understand the ticket flow',
+      'Learn the SLA basics: P1/P2/P3/P4 priority and TTR (time to resolve)',
+      'Set up the device taxonomy - walk through every device in this catalog',
+      'Do a store visit ride-along with a senior engineer (pick a DT store first)',
+      'Create your store list for Klang Valley and mark your territory',
+      'Install this reference app on your phone and enable offline mode',
+    ],
+  },
+  {
+    title: 'Reading a Ticket (what each field means)',
+    items: [
+      'SLA / Priority: P3 NORMAL = routine issue, has TTR deadline',
+      'TTR (Time To Resolve): the deadline by which the issue should be resolved',
+      'Reporter: who raised it - contact them directly',
+      'Store # + Name: which branch (e.g. #424 Amerin Balakong DT)',
+      'Issue line: device + problem (e.g. "KVS Counter Presenter | Offline")',
+      'Workaround: what was already tried - do not repeat blindly',
+      'User request onsite: means remote steps failed, plan a visit',
+    ],
+  },
+  {
+    title: 'Before Calling the Store Manager',
+    items: [
+      'Check this app: what device is it, where does it live?',
+      'Check recent tickets for that store/device - is it a repeat?',
+      'Try remote access if available (verify device is reachable)',
+      'Only call the manager if you genuinely need physical eyes or access',
+      'Log everything you tried - the ticket must show your work',
+    ],
+  },
+];
 
-const OnboardingPage: React.FC = () => {
-  // Mock data fallback
-  const defaultSteps: OnboardingStep[] = [
-    {
-      week: 1,
-      title: "Introduction & Basics",
-      tasks: [
-        "Read the Naming Convention Guide",
-        "Familiarize with McDonald's Glossary",
-        "Setup IT Accounts and Access",
-        "Shadow a senior engineer on 2 store visits"
-      ],
-      resources: ["/naming"]
-    },
-    {
-      week: 2,
-      title: "Store Topologies & Devices",
-      tasks: [
-        "Review Store Layout types (Standalone vs Mall)",
-        "Identify core POS devices",
-        "Understand Kitchen Video System (KVS)",
-        "Complete basic device swap training"
-      ],
-      resources: ["/devices", "/stores"]
-    },
-    {
-      week: 3,
-      title: "Troubleshooting Fundamentals",
-      tasks: [
-        "Review top 10 common issues",
-        "Handle a level-1 support ticket",
-        "Learn escalation paths for critical issues",
-        "Practice network ping and basic diagnostics"
-      ],
-      resources: ["/troubleshooting"]
-    },
-    {
-      week: 4,
-      title: "Independence & Assessment",
-      tasks: [
-        "Complete a solo store diagnostic visit",
-        "Update documentation for 1 store",
-        "Final review with IT Manager"
-      ]
-    }
-  ];
+const essential = deviceTypes
+  .filter((d) =>
+    ['TC', 'KVS', 'KVS_PRESENTER', 'COD', 'DELPHI', 'SWITCH', 'DT_HEADSET', 'KIOSK'].includes(d.id)
+  )
+  .map((d) => ({ ...d, priority: 'LEARN FIRST' }));
 
-  const steps = (onboardingData as unknown as OnboardingStep[]) || defaultSteps;
-
-  const [completedTasks, setCompletedTasks] = useState<Set<string>>(new Set());
-
-  const toggleTask = (taskKey: string) => {
-    const next = new Set(completedTasks);
-    if (next.has(taskKey)) {
-      next.delete(taskKey);
-    } else {
-      next.add(taskKey);
-    }
-    setCompletedTasks(next);
-  };
-
-  const totalTasks = steps.reduce((acc, step) => acc + step.tasks.length, 0);
-  const progressPercent = totalTasks === 0 ? 0 : Math.round((completedTasks.size / totalTasks) * 100);
-
+export default function Onboarding() {
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white p-4 md:p-8 space-y-8 animate-in fade-in duration-300 max-w-5xl mx-auto">
-      <header className="space-y-4 text-center pb-8 border-b border-white/10">
-        <h1 className="text-4xl font-bold text-[#FFC72C]">New Engineer Onboarding</h1>
-        <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-          Welcome to the McDonald's MY KV IT Device team. Follow this guide to get up to speed with our systems, devices, and procedures.
-        </p>
+    <div className="animate-fade-up">
+      <PageHeader
+        title="New Engineer Onboarding"
+        subtitle="Everything a new McDonald's MY Klang Valley IT engineer needs to know in the first weeks."
+      />
 
-        {/* Progress Tracker */}
-        <div className="max-w-md mx-auto pt-4 space-y-2">
-          <div className="flex justify-between text-sm font-semibold">
-            <span className="text-white">Training Progress</span>
-            <span className="text-[#DA291C]">{progressPercent}%</span>
-          </div>
-          <div className="h-3 w-full bg-white/10 rounded-full overflow-hidden">
-            <div 
-              className="h-full bg-gradient-to-r from-[#DA291C] to-[#FFC72C] transition-all duration-500 ease-out"
-              style={{ width: `${progressPercent}%` }}
-            />
-          </div>
-        </div>
-      </header>
-
-      <div className="grid md:grid-cols-3 gap-8">
-        <div className="md:col-span-2 space-y-6">
-          {steps.map((step) => (
-            <section key={step.week} className="bg-[#1a1a1a] rounded-2xl p-6 border border-white/10 backdrop-blur-md shadow-xl relative overflow-hidden">
-              <div className="absolute top-0 right-0 bg-[#333] text-white/50 text-[10px] font-bold px-3 py-1 rounded-bl-lg uppercase tracking-wider">
-                Phase {step.week}
-              </div>
-              
-              <div className="flex items-center gap-4 mb-6">
-                <div className="h-12 w-12 rounded-xl bg-[#DA291C]/10 border border-[#DA291C]/30 flex items-center justify-center text-[#DA291C] font-bold text-xl shrink-0">
-                  W{step.week}
-                </div>
-                <h2 className="text-2xl font-bold text-white">{step.title}</h2>
-              </div>
-
-              <div className="space-y-3">
-                {step.tasks.map((task, idx) => {
-                  const taskKey = `w${step.week}-t${idx}`;
-                  const isDone = completedTasks.has(taskKey);
-                  return (
-                    <div 
-                      key={taskKey} 
-                      onClick={() => toggleTask(taskKey)}
-                      className={`flex items-start gap-3 p-3 rounded-xl cursor-pointer border transition-all ${
-                        isDone 
-                          ? 'bg-[#FFC72C]/5 border-[#FFC72C]/30' 
-                          : 'bg-[#111111] border-white/5 hover:border-white/20'
-                      }`}
-                    >
-                      <div className="shrink-0 mt-0.5">
-                        {isDone ? (
-                          <CheckCircle2 className="text-[#FFC72C]" size={20} />
-                        ) : (
-                          <Circle className="text-gray-500" size={20} />
-                        )}
-                      </div>
-                      <span className={`text-sm transition-colors ${isDone ? 'text-white font-medium' : 'text-gray-400'}`}>
-                        {task}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
-
-              {step.resources && step.resources.length > 0 && (
-                <div className="mt-6 pt-4 border-t border-white/5 flex gap-2 items-center text-sm">
-                  <BookOpen size={16} className="text-gray-400" />
-                  <span className="text-gray-400">Related Resources:</span>
-                  <div className="flex gap-2">
-                    {step.resources.map(res => (
-                      <Link key={res} to={res} className="text-[#4DA8DA] hover:underline px-2 py-1 bg-white/5 rounded">
-                        {res}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </section>
-          ))}
-        </div>
-
-        {/* Sidebar */}
-        <div className="space-y-6">
-          <section className="bg-[#1a1a1a] rounded-2xl p-6 border border-white/10 shadow-xl">
-            <h3 className="text-lg font-bold text-[#FFC72C] mb-4">Quick Links</h3>
-            <div className="space-y-2">
-              <Link to="/naming" className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors border border-transparent hover:border-white/10 group">
-                <div className="p-2 bg-[#DA291C]/10 text-[#DA291C] rounded-lg group-hover:bg-[#DA291C] group-hover:text-white transition-colors">
-                  <ShieldAlert size={18} />
-                </div>
-                <div className="flex-1">
-                  <div className="font-semibold text-sm">Naming Convention</div>
-                  <div className="text-xs text-gray-500">Asset tag reference</div>
-                </div>
-              </Link>
-              <Link to="/devices" className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors border border-transparent hover:border-white/10 group">
-                <div className="p-2 bg-[#FFC72C]/10 text-[#FFC72C] rounded-lg group-hover:bg-[#FFC72C] group-hover:text-black transition-colors">
-                  <Monitor size={18} />
-                </div>
-                <div className="flex-1">
-                  <div className="font-semibold text-sm">Device Catalog</div>
-                  <div className="text-xs text-gray-500">Specs and photos</div>
-                </div>
-              </Link>
-              <Link to="/troubleshooting" className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors border border-transparent hover:border-white/10 group">
-                <div className="p-2 bg-blue-500/10 text-blue-400 rounded-lg group-hover:bg-blue-500 group-hover:text-white transition-colors">
-                  <Wrench size={18} />
-                </div>
-                <div className="flex-1">
-                  <div className="font-semibold text-sm">Troubleshooting</div>
-                  <div className="text-xs text-gray-500">Known issues database</div>
-                </div>
-              </Link>
-              <Link to="/stores" className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors border border-transparent hover:border-white/10 group">
-                <div className="p-2 bg-green-500/10 text-green-400 rounded-lg group-hover:bg-green-500 group-hover:text-white transition-colors">
-                  <MapPin size={18} />
-                </div>
-                <div className="flex-1">
-                  <div className="font-semibold text-sm">Store Profiles</div>
-                  <div className="text-xs text-gray-500">Layouts and topologies</div>
-                </div>
-              </Link>
+      <div className="grid lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2 space-y-8">
+          <section>
+            <h2 className="section-title">
+              <ClipboardCheck className="w-5 h-5 text-mcd-red" /> Checklists
+            </h2>
+            <div className="grid gap-6">
+              {checklists.map((list, i) => (
+                <Reveal key={list.title} delay={i * 50}>
+                  <Card className="border-mcd-red/10 shadow-lg shadow-mcd-red/5">
+                    <CardHeader title={list.title} />
+                    <CardBody className="bg-mcd-gray-50/30 dark:bg-mcd-gray-800/10">
+                      <ul className="space-y-3">
+                        {list.items.map((item, j) => (
+                          <li key={item} className="flex items-start gap-4 text-sm font-medium text-mcd-gray-800 dark:text-mcd-gray-100 p-3 rounded-xl bg-white dark:bg-mcd-gray-800 shadow-sm border border-mcd-gray-100 dark:border-mcd-gray-700">
+                            <span className="w-7 h-7 rounded-lg bg-mcd-red/10 text-mcd-red font-mono font-bold flex items-center justify-center shrink-0 mt-0.5">
+                              {j + 1}
+                            </span>
+                            <span className="leading-relaxed mt-1">{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </CardBody>
+                  </Card>
+                </Reveal>
+              ))}
             </div>
           </section>
 
-          <section className="bg-[#1a1a1a] rounded-2xl p-6 border border-white/10 shadow-xl">
-            <h3 className="text-lg font-bold text-[#FFC72C] mb-4">Glossary</h3>
-            <ul className="space-y-3 text-sm">
-              <li className="flex gap-2">
-                <strong className="text-white min-w-[3rem]">KVS</strong>
-                <span className="text-gray-400">Kitchen Video System</span>
-              </li>
-              <li className="flex gap-2">
-                <strong className="text-white min-w-[3rem]">COD</strong>
-                <span className="text-gray-400">Customer Order Display</span>
-              </li>
-              <li className="flex gap-2">
-                <strong className="text-white min-w-[3rem]">DT</strong>
-                <span className="text-gray-400">Drive-Thru</span>
-              </li>
-              <li className="flex gap-2">
-                <strong className="text-white min-w-[3rem]">POS</strong>
-                <span className="text-gray-400">Point of Sale</span>
-              </li>
-              <li className="flex gap-2">
-                <strong className="text-white min-w-[3rem]">KV</strong>
-                <span className="text-gray-400">Klang Valley (Region)</span>
-              </li>
-            </ul>
+          <section>
+            <h2 className="section-title">
+              <BookOpen className="w-5 h-5 text-mcd-red" /> Learn These Devices First
+            </h2>
+            <div className="grid sm:grid-cols-2 gap-4">
+              {essential.map((d, i) => (
+                <Reveal key={d.id} delay={i * 30}>
+                  <Link to={`/devices/${d.id}`}>
+                    <Card hover className="h-full p-5 border-mcd-red/10 shadow-lg shadow-mcd-red/5 group">
+                      <div className="flex items-center justify-between gap-3 mb-2">
+                        <span className="font-mono text-xl font-bold text-mcd-red drop-shadow-sm">{d.shortName}</span>
+                        <Badge variant="red">Learn first</Badge>
+                      </div>
+                      <div className="text-base font-semibold text-mcd-gray-900 dark:text-mcd-gray-50 mb-2">
+                        {d.fullName}
+                      </div>
+                      <div className="text-sm font-medium text-mcd-gray-600 dark:text-mcd-gray-300 line-clamp-2 leading-relaxed mb-4">
+                        {d.description}
+                      </div>
+                      <div className="text-xs font-bold text-mcd-red group-hover:text-mcd-red-dark transition-colors flex items-center mt-auto uppercase tracking-wide">
+                        View Details <ArrowRight className="w-3 h-3 ml-1" />
+                      </div>
+                    </Card>
+                  </Link>
+                </Reveal>
+              ))}
+            </div>
           </section>
         </div>
+
+        <aside className="space-y-6">
+          <Card className="bg-gradient-to-br from-mcd-red/5 to-transparent border-mcd-red/10 shadow-lg">
+            <CardHeader
+              title={
+                <span className="flex items-center gap-2">
+                  <Smartphone className="w-5 h-5 text-mcd-red" /> Field Quick Start
+                </span>
+              }
+            />
+            <CardBody>
+              <ol className="space-y-4">
+                <li className="flex items-start gap-3 text-sm text-mcd-gray-800 dark:text-mcd-gray-100 font-medium">
+                  <span className="font-mono text-mcd-red font-bold text-base mt-0.5">1</span>
+                  <span className="leading-relaxed">On arrival, find the <strong>comms cabinet</strong> first - it is the heart of every store network.</span>
+                </li>
+                <li className="flex items-start gap-3 text-sm text-mcd-gray-800 dark:text-mcd-gray-100 font-medium">
+                  <span className="font-mono text-mcd-red font-bold text-base mt-0.5">2</span>
+                  <span className="leading-relaxed">Map the LAN runs: patch panel port → switch port → device. Label them as you go.</span>
+                </li>
+                <li className="flex items-start gap-3 text-sm text-mcd-gray-800 dark:text-mcd-gray-100 font-medium">
+                  <span className="font-mono text-mcd-red font-bold text-base mt-0.5">3</span>
+                  <span className="leading-relaxed">Note the <strong>device index</strong> (COD 2, TC1) - the number tells you which unit.</span>
+                </li>
+                <li className="flex items-start gap-3 text-sm text-mcd-gray-800 dark:text-mcd-gray-100 font-medium">
+                  <span className="font-mono text-mcd-red font-bold text-base mt-0.5">4</span>
+                  <span className="leading-relaxed">Take a photo of each device label for your records.</span>
+                </li>
+              </ol>
+            </CardBody>
+          </Card>
+
+          <Card className="bg-gradient-to-br from-mcd-yellow/10 to-mcd-yellow/5 border-mcd-yellow/20">
+            <CardHeader
+              title={
+                <span className="flex items-center gap-2 font-bold text-mcd-yellow-dark">
+                  <Tag className="w-5 h-5" /> Golden Rules
+                </span>
+              }
+            />
+            <CardBody>
+              <ul className="space-y-3 text-sm font-medium text-mcd-gray-800 dark:text-mcd-gray-100">
+                <li className="flex items-start gap-2">
+                  <span className="mt-2 w-1.5 h-1.5 rounded-full bg-mcd-yellow-dark shrink-0" />
+                  <span className="leading-relaxed">Always reseat BOTH cable ends before escalating.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="mt-2 w-1.5 h-1.5 rounded-full bg-mcd-yellow-dark shrink-0" />
+                  <span className="leading-relaxed">Check remote access first - you can often fix it remotely.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="mt-2 w-1.5 h-1.5 rounded-full bg-mcd-yellow-dark shrink-0" />
+                  <span className="leading-relaxed">Reboot the <strong>Delphi modem</strong> only after checking device-side first.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="mt-2 w-1.5 h-1.5 rounded-full bg-mcd-yellow-dark shrink-0" />
+                  <span className="leading-relaxed">Log every step you try on the ticket.</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="mt-2 w-1.5 h-1.5 rounded-full bg-mcd-yellow-dark shrink-0" />
+                  <span className="leading-relaxed">Never assume - verify the model on the physical label.</span>
+                </li>
+              </ul>
+            </CardBody>
+          </Card>
+
+          <Card className="border-mcd-red/30">
+            <CardHeader
+              title={
+                <span className="flex items-center gap-2">
+                  <MessageCircle className="w-5 h-5 text-mcd-red" /> When to Ask for Help
+                </span>
+              }
+            />
+            <CardBody>
+              <p className="text-sm font-medium text-mcd-gray-700 dark:text-mcd-gray-200 leading-relaxed p-4 rounded-xl bg-mcd-red/5">
+                If a device still fails after restart + reseat + reboot modem, or you see a
+                burning smell / smoke, stop, isolate power, and escalate immediately.
+              </p>
+            </CardBody>
+          </Card>
+
+          <Card>
+            <CardHeader
+              title={
+                <span className="flex items-center gap-2">
+                  <Wrench className="w-5 h-5 text-mcd-gray-400" /> Keep This App Alive
+                </span>
+              }
+            />
+            <CardBody>
+              <p className="text-sm font-medium text-mcd-gray-600 dark:text-mcd-gray-300 leading-relaxed p-4 rounded-xl bg-mcd-gray-50 dark:bg-mcd-gray-800">
+                This is a living reference. Found a new device, a different label format, or a
+                better workaround? Add it so the next new engineer does not have to ask the
+                manager.
+              </p>
+            </CardBody>
+          </Card>
+        </aside>
       </div>
     </div>
   );
-};
-
-export default OnboardingPage;
+}

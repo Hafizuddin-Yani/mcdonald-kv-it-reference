@@ -1,360 +1,279 @@
 import { useMemo } from 'react';
-import { Link, useParams } from 'react-router';
+import { useParams, Link } from 'react-router';
 import {
-  ChevronLeft,
   MapPin,
   Phone,
-  MessageCircle,
-  Monitor,
-  Tv,
-  Headphones,
+  User,
   Wifi,
-  Network,
-  Keyboard,
-  TabletSmartphone,
-  MonitorSmartphone,
-  Router,
-  CheckCircle2,
-  AlertTriangle,
-  RotateCcw,
-  AlertCircle,
-  Calendar,
-  Hash,
-  Cpu,
+  Boxes,
+  ArrowLeft,
+  History,
+  FileText,
 } from 'lucide-react';
-import type { Store, Device } from '../types';
-import storesData from '../data/stores.json';
-import devicesData from '../data/devices.json';
-
-const stores = storesData as unknown as Store[];
-const devices = devicesData as unknown as Device[];
-
-const FORMAT_STYLES: Record<string, string> = {
-  DT: 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20',
-  Mall: 'bg-blue-500/10 text-blue-400 border border-blue-500/20',
-  Standalone: 'bg-purple-500/10 text-purple-400 border border-purple-500/20',
-  Airport: 'bg-orange-500/10 text-orange-400 border border-orange-500/20',
-  Express: 'bg-pink-500/10 text-pink-400 border border-pink-500/20',
-};
-
-const STATUS_CONFIG: Record<string, { style: string; icon: typeof CheckCircle2; label: string }> = {
-  active: { style: 'text-emerald-400', icon: CheckCircle2, label: 'Active' },
-  faulty: { style: 'text-red-400', icon: AlertTriangle, label: 'Faulty' },
-  replaced: { style: 'text-yellow-400', icon: RotateCcw, label: 'Replaced' },
-};
-
-const DEVICE_ICONS: Record<string, typeof Monitor> = {
-  TC: Monitor,
-  KVS: Tv,
-  KVS_PRES: MonitorSmartphone,
-  COD: MonitorSmartphone,
-  DT_HEADSET: Headphones,
-  DELPHI: Router,
-  SWITCH: Network,
-  AP: Wifi,
-  BUMP_BAR: Keyboard,
-  KIOSK: TabletSmartphone,
-};
-
-const CATEGORY_COLORS: Record<string, string> = {
-  POS: 'text-purple-400 bg-purple-500/10',
-  Kitchen: 'text-orange-400 bg-orange-500/10',
-  'Customer-facing': 'text-cyan-400 bg-cyan-500/10',
-  'Drive-thru': 'text-emerald-400 bg-emerald-500/10',
-  Network: 'text-blue-400 bg-blue-500/10',
-};
+import { Card, CardHeader, CardBody } from '../components/ui/Card';
+import { Badge } from '../components/ui/Badge';
+import { PageHeader } from '../components/ui/PageHeader';
+import { EmptyState } from '../components/ui/EmptyState';
+import { Breadcrumbs } from '../components/ui/Breadcrumbs';
+import { useStore } from '../hooks/useStoreData';
+import { useDeviceTypes } from '../hooks/useDeviceData';
+import { useSavedTickets } from '../hooks/useSavedTickets';
+import { getTicketsByStore } from '../data/tickets';
+import { formatDistrict, formatStoreFormat, formatDate, telLink } from '../utils';
 
 export default function StoreDetail() {
-  const { id } = useParams<{ id: string }>();
+  const { storeId } = useParams<{ storeId: string }>();
+  const store = useStore(storeId);
+  const deviceTypes = useDeviceTypes();
+  const { saved } = useSavedTickets();
+  const tickets = useMemo(() => {
+    if (!store) return [];
+    const local = saved.filter(
+      (t) => t.storeNumber === store.number || t.storeNumber === store.id
+    );
+    const ref = getTicketsByStore(store.number);
+    const seen = new Set<string>();
+    const merged = [];
+    for (const t of [...local, ...ref]) {
+      if (seen.has(t.id)) continue;
+      seen.add(t.id);
+      merged.push(t);
+    }
+    return merged;
+  }, [store, saved]);
 
-  const store = useMemo(() => stores.find((s) => s.id === id), [id]);
-
-  const deviceMeta = useMemo(() => {
-    const map = new Map<string, Device>();
-    devices.forEach((d) => map.set(d.shortName, d));
-    return map;
-  }, []);
-
-  const deviceStats = useMemo(() => {
-    if (!store) return null;
-    const total = store.devices.length;
-    const active = store.devices.filter((d) => d.status === 'active').length;
-    const faulty = store.devices.filter((d) => d.status === 'faulty').length;
-    const replaced = store.devices.filter((d) => d.status === 'replaced').length;
-
-    const byCategory: Record<string, number> = {};
-    store.devices.forEach((d) => {
-      const meta = deviceMeta.get(d.type);
-      const cat = meta?.category || 'Other';
-      byCategory[cat] = (byCategory[cat] || 0) + 1;
-    });
-
-    return { total, active, faulty, replaced, byCategory };
-  }, [store, deviceMeta]);
-
-  // 404 state
   if (!store) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-4 space-y-6" id="store-not-found">
-        <div className="w-20 h-20 bg-[#1a1a1a] rounded-full flex items-center justify-center">
-          <AlertCircle className="w-10 h-10 text-[#DA291C]" />
-        </div>
-        <div className="text-center space-y-2">
-          <h1 className="text-3xl font-bold text-white">Store Not Found</h1>
-          <p className="text-[#a0a0a0]">No store found with ID "{id}".</p>
-        </div>
-        <Link
-          to="/stores"
-          className="bg-[#1a1a1a] hover:bg-[#222] border border-white/10 text-white px-6 py-3 rounded-xl flex items-center gap-2 transition-colors min-h-[44px]"
-          id="back-to-stores-404"
-        >
-          <ChevronLeft className="w-5 h-5" />
-          Back to Directory
+      <div className="animate-fade-up">
+        <Link to="/stores" className="inline-flex items-center gap-2 text-sm font-medium text-mcd-red hover:text-mcd-red-dark transition-colors mb-6 bg-mcd-red/5 hover:bg-mcd-red/10 px-3 py-1.5 rounded-full">
+          <ArrowLeft className="w-4 h-4" /> Back to stores
         </Link>
+        <EmptyState title="Store not found" message="Check the store number and try again." />
       </div>
     );
   }
 
-  const managerPhone = store.manager?.phone?.replace(/\D/g, '') || '';
-  const waLink = managerPhone ? `https://wa.me/6${managerPhone}` : '';
+  const deviceTypeById = (id: string) => deviceTypes.find((d) => d.id === id);
 
   return (
-    <div className="p-4 md:p-8 max-w-7xl mx-auto space-y-6 md:space-y-8" id={`store-detail-${store.id}`}>
-      {/* Back Link */}
-      <div className="animate-fade-in">
-        <Link
-          to="/stores"
-          id="back-to-stores"
-          className="inline-flex items-center gap-2 text-[#a0a0a0] hover:text-[#FFC72C] transition-colors py-2 min-h-[44px]"
-        >
-          <ChevronLeft className="w-5 h-5" />
-          <span className="font-medium">Back to Directory</span>
-        </Link>
-      </div>
+    <div className="animate-fade-up">
+      <Breadcrumbs
+        items={[
+          { label: 'Stores', to: '/stores' },
+          { label: `#${store.number} ${store.name}` },
+        ]}
+      />
 
-      {/* Store Header */}
-      <div className="glass-card-static overflow-hidden animate-fade-in-up" id="store-header">
-        <div className="gradient-header p-6 md:p-8">
-          <div className="md:flex md:items-start md:justify-between gap-8">
-            <div className="space-y-4 flex-1">
-              {/* Badges */}
-              <div className="flex flex-wrap items-center gap-2">
-                <span className={`badge ${FORMAT_STYLES[store.format] || ''}`}>
-                  {store.format}
-                </span>
-                <span className="badge bg-[#FFC72C]/10 text-[#FFC72C] border border-[#FFC72C]/20">
-                  {store.district}
-                </span>
-                {store.lastVerified && (
-                  <span className="badge bg-white/5 text-[#a0a0a0] border border-white/10">
-                    <Calendar className="w-3 h-3 mr-1" />
-                    Verified {new Date(store.lastVerified).toLocaleDateString('en-MY', { day: 'numeric', month: 'short', year: 'numeric' })}
-                  </span>
-                )}
-              </div>
+      <PageHeader
+        title={
+          <span className="flex items-center gap-3 flex-wrap">
+            <span className="text-mcd-red drop-shadow-sm">#{store.number}</span> 
+            <span>{store.name}</span>
+          </span>
+        }
+        subtitle={`${store.address}`}
+        action={
+          <div className="flex items-center gap-2 mt-2 sm:mt-0">
+            <Badge variant={store.format === 'DT' ? 'red' : 'gray'}>
+              {formatStoreFormat(store.format)}
+            </Badge>
+            <Badge variant="blue">{formatDistrict(store.district)}</Badge>
+          </div>
+        }
+      />
 
-              {/* Store Name */}
-              <div>
-                <div className="flex items-center gap-3 mb-1">
-                  <span className="text-[#FFC72C] font-mono text-lg font-bold">#{store.id}</span>
+      <div className="grid lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 space-y-6">
+          <Card>
+            <CardHeader
+              title="Store Information"
+              subtitle={`Last audited ${store.lastAuditDate ? formatDate(store.lastAuditDate) : 'never'} · by ${store.auditBy ?? '—'}`}
+            />
+            <CardBody className="grid sm:grid-cols-2 gap-5">
+              <div className="flex items-start gap-3 p-3 rounded-xl bg-mcd-gray-50/50 dark:bg-mcd-gray-800/30">
+                <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-white shadow-sm border border-mcd-gray-100 dark:bg-mcd-gray-700 dark:border-mcd-gray-600 shrink-0">
+                  <MapPin className="w-4 h-4 text-mcd-red" />
                 </div>
-                <h1 className="text-2xl md:text-3xl font-bold text-white">{store.name}</h1>
-              </div>
-
-              {/* Address */}
-              <div className="flex items-start gap-2 text-[#a0a0a0]">
-                <MapPin className="w-4 h-4 mt-0.5 shrink-0 text-[#FFC72C]" />
-                <span className="text-sm">{store.address}</span>
-              </div>
-
-              {/* Manager Contact */}
-              {store.manager && (
-                <div className="flex flex-wrap items-center gap-3 pt-2">
-                  <span className="text-sm text-[#a0a0a0]">
-                    Manager: <span className="text-white font-medium">{store.manager.name}</span>
-                  </span>
-                  {store.manager.phone && (
-                    <>
-                      <a
-                        href={`tel:${store.manager.phone}`}
-                        className="inline-flex items-center gap-1.5 bg-[#22c55e]/10 text-[#22c55e] px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-[#22c55e]/20 transition-colors min-h-[36px]"
-                        id="manager-call"
-                      >
-                        <Phone className="w-3.5 h-3.5" />
-                        Call
-                      </a>
-                      {waLink && (
-                        <a
-                          href={waLink}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 bg-[#25D366]/10 text-[#25D366] px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-[#25D366]/20 transition-colors min-h-[36px]"
-                          id="manager-whatsapp"
-                        >
-                          <MessageCircle className="w-3.5 h-3.5" />
-                          WhatsApp
-                        </a>
-                      )}
-                    </>
-                  )}
+                <div>
+                  <div className="text-[11px] font-semibold uppercase tracking-wider text-mcd-gray-400">Address</div>
+                  <div className="text-sm font-medium text-mcd-gray-700 dark:text-mcd-gray-200 mt-0.5">
+                    {store.address}
+                  </div>
                 </div>
-              )}
-            </div>
-
-            {/* Mini Map Placeholder */}
-            <div className="mt-6 md:mt-0 md:w-72 lg:w-80 shrink-0">
-              <div
-                className="h-48 md:h-56 rounded-xl bg-[#1a1a1a] border border-white/5 flex items-center justify-center overflow-hidden"
-                id="store-map-placeholder"
-              >
-                <div className="text-center space-y-2">
-                  <MapPin className="w-8 h-8 text-[#FFC72C] mx-auto" />
-                  <p className="text-xs text-[#666]">
-                    {store.coordinates.lat.toFixed(4)}°N, {store.coordinates.lng.toFixed(4)}°E
-                  </p>
+              </div>
+              <div className="flex items-start gap-3 p-3 rounded-xl bg-mcd-gray-50/50 dark:bg-mcd-gray-800/30">
+                <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-white shadow-sm border border-mcd-gray-100 dark:bg-mcd-gray-700 dark:border-mcd-gray-600 shrink-0">
+                  <Wifi className="w-4 h-4 text-accent-blue" />
+                </div>
+                <div>
+                  <div className="text-[11px] font-semibold uppercase tracking-wider text-mcd-gray-400">Format</div>
+                  <div className="text-sm font-medium text-mcd-gray-700 dark:text-mcd-gray-200 mt-0.5">
+                    {formatStoreFormat(store.format)}
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 p-3 rounded-xl bg-mcd-gray-50/50 dark:bg-mcd-gray-800/30">
+                <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-white shadow-sm border border-mcd-gray-100 dark:bg-mcd-gray-700 dark:border-mcd-gray-600 shrink-0">
+                  <User className="w-4 h-4 text-accent-green" />
+                </div>
+                <div>
+                  <div className="text-[11px] font-semibold uppercase tracking-wider text-mcd-gray-400">
+                    Store Manager
+                  </div>
+                  <div className="text-sm font-medium text-mcd-gray-900 dark:text-mcd-gray-50 mt-0.5">
+                    {store.manager.name} <span className="text-mcd-gray-400 font-normal">({store.manager.role})</span>
+                  </div>
+                </div>
+              </div>
+              <div className="flex items-start gap-3 p-3 rounded-xl bg-mcd-gray-50/50 dark:bg-mcd-gray-800/30">
+                <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-white shadow-sm border border-mcd-gray-100 dark:bg-mcd-gray-700 dark:border-mcd-gray-600 shrink-0">
+                  <Phone className="w-4 h-4 text-mcd-yellow-dark" />
+                </div>
+                <div>
+                  <div className="text-[11px] font-semibold uppercase tracking-wider text-mcd-gray-400">
+                    Contact
+                  </div>
                   <a
-                    href={`https://www.google.com/maps?q=${store.coordinates.lat},${store.coordinates.lng}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-block text-xs text-[#FFC72C] hover:text-[#FFD966] transition-colors"
-                    id="open-google-maps"
+                    href={telLink(store.manager.phone)}
+                    className="text-sm text-mcd-red hover:text-mcd-red-dark transition-colors font-semibold mt-0.5 block"
                   >
-                    Open in Google Maps →
+                    {store.manager.phone}
                   </a>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
+            </CardBody>
+          </Card>
 
-      {/* Device Stats */}
-      {deviceStats && (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 animate-fade-in-up stagger-1" style={{ opacity: 0 }} id="device-stats">
-          <div className="glass-card-static p-4">
-            <div className="flex items-center gap-2 mb-2">
-              <Cpu className="w-4 h-4 text-[#FFC72C]" />
-              <span className="text-xs text-[#666] uppercase tracking-wider">Total</span>
-            </div>
-            <p className="text-2xl font-bold text-white">{deviceStats.total}</p>
-          </div>
-          <div className="glass-card-static p-4">
-            <div className="flex items-center gap-2 mb-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-              <span className="text-xs text-[#666] uppercase tracking-wider">Active</span>
-            </div>
-            <p className="text-2xl font-bold text-emerald-400">{deviceStats.active}</p>
-          </div>
-          <div className="glass-card-static p-4">
-            <div className="flex items-center gap-2 mb-2">
-              <AlertTriangle className="w-4 h-4 text-red-400" />
-              <span className="text-xs text-[#666] uppercase tracking-wider">Faulty</span>
-            </div>
-            <p className="text-2xl font-bold text-red-400">{deviceStats.faulty}</p>
-          </div>
-          <div className="glass-card-static p-4">
-            <div className="flex items-center gap-2 mb-2">
-              <RotateCcw className="w-4 h-4 text-yellow-400" />
-              <span className="text-xs text-[#666] uppercase tracking-wider">Replaced</span>
-            </div>
-            <p className="text-2xl font-bold text-yellow-400">{deviceStats.replaced}</p>
-          </div>
-        </div>
-      )}
-
-      {/* Category Breakdown */}
-      {deviceStats && Object.keys(deviceStats.byCategory).length > 0 && (
-        <div className="glass-card-static p-5 animate-fade-in-up stagger-2" style={{ opacity: 0 }} id="category-breakdown">
-          <h2 className="text-sm font-semibold text-white mb-3 flex items-center gap-2">
-            <Hash className="w-4 h-4 text-[#FFC72C]" />
-            By Category
-          </h2>
-          <div className="flex flex-wrap gap-2">
-            {Object.entries(deviceStats.byCategory).map(([cat, count]) => (
-              <span key={cat} className={`badge ${CATEGORY_COLORS[cat] || 'bg-white/5 text-[#a0a0a0]'}`}>
-                {cat}: {count}
-              </span>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Device Inventory */}
-      <div className="animate-fade-in-up stagger-3" style={{ opacity: 0 }} id="device-inventory">
-        <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-          <Cpu className="w-5 h-5 text-[#FFC72C]" />
-          Device Inventory
-          <span className="text-sm text-[#666] font-normal">({store.devices.length})</span>
-        </h2>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {store.devices.map((device, idx) => {
-            const meta = deviceMeta.get(device.type);
-            const IconComponent = DEVICE_ICONS[device.type] || Monitor;
-            const statusCfg = STATUS_CONFIG[device.status || 'active'];
-            const StatusIcon = statusCfg.icon;
-            const catColor = CATEGORY_COLORS[meta?.category || ''] || 'text-[#a0a0a0] bg-white/5';
-
-            return (
-              <div
-                key={`${device.type}-${device.index}-${idx}`}
-                className="glass-card p-4 space-y-3"
-                id={`device-card-${device.assetTag}`}
-              >
-                {/* Device Header */}
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${catColor}`}>
-                      <IconComponent className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-white">{device.type}</p>
-                      <p className="text-xs text-[#666]">{meta?.fullName || 'Unknown Device'}</p>
-                    </div>
-                  </div>
-                  <div className={`flex items-center gap-1 ${statusCfg.style}`}>
-                    <StatusIcon className="w-3.5 h-3.5" />
-                    <span className="text-xs font-medium">{statusCfg.label}</span>
-                  </div>
-                </div>
-
-                {/* Details */}
-                <div className="space-y-1.5 text-xs">
-                  <div className="flex justify-between">
-                    <span className="text-[#666]">Location</span>
-                    <span className="text-[#a0a0a0] text-right">{device.location}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-[#666]">Asset Tag</span>
-                    <span className="text-[#FFC72C] font-mono text-right">{device.assetTag}</span>
-                  </div>
-                  {device.index !== undefined && (
-                    <div className="flex justify-between">
-                      <span className="text-[#666]">Index</span>
-                      <span className="text-[#a0a0a0]">#{device.index}</span>
-                    </div>
-                  )}
-                </div>
-
-                {/* Notes */}
-                {device.notes && (
-                  <p className="text-xs text-[#666] italic border-t border-white/5 pt-2">
-                    {device.notes}
-                  </p>
-                )}
-
-                {/* Link to device type page */}
-                <Link
-                  to={`/devices/${device.type}`}
-                  className="block text-center text-xs text-[#FFC72C] hover:text-[#FFD966] transition-colors py-1.5 border-t border-white/5 mt-2"
-                  id={`device-link-${device.assetTag}`}
-                >
-                  View {device.type} Details →
-                </Link>
+          <Card>
+            <CardHeader
+              title={
+                <span className="flex items-center gap-2">
+                  <Boxes className="w-4 h-4 text-mcd-gray-400" /> Device Inventory
+                </span>
+              }
+              subtitle={`${store.devices.length} known devices. Verify and update during site visits.`}
+            />
+            <CardBody className="p-0">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="text-left text-[11px] font-semibold uppercase tracking-wider text-mcd-gray-400 border-b border-mcd-gray-100/80 dark:border-mcd-gray-700/40 bg-mcd-gray-50/50 dark:bg-mcd-gray-800/30">
+                      <th className="px-5 py-3 rounded-tl-xl">Device</th>
+                      <th className="px-5 py-3">Location in Store</th>
+                      <th className="px-5 py-3 rounded-tr-xl">Asset Tag</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-mcd-gray-100/50 dark:divide-mcd-gray-700/30">
+                    {store.devices.map((d, i) => {
+                      const type = deviceTypeById(d.typeId);
+                      return (
+                        <tr key={i} className="hover:bg-mcd-gray-50/80 dark:hover:bg-mcd-gray-800/40 transition-colors group">
+                          <td className="px-5 py-3.5">
+                            {type ? (
+                              <Link
+                                to={`/devices/${type.id}`}
+                                className="font-mono font-semibold text-mcd-red group-hover:text-mcd-red-dark transition-colors"
+                              >
+                                {type.shortName}
+                                {d.index ? <span className="text-mcd-gray-400"> {d.index}</span> : ''}
+                              </Link>
+                            ) : (
+                              <span className="font-mono font-semibold">{d.typeId}</span>
+                            )}
+                            {d.model && (
+                              <div className="text-[11px] text-mcd-gray-400 mt-1">{d.model}</div>
+                            )}
+                          </td>
+                          <td className="px-5 py-3.5 font-medium text-mcd-gray-700 dark:text-mcd-gray-200">
+                            {d.location}
+                          </td>
+                          <td className="px-5 py-3.5 font-mono text-xs text-mcd-gray-500 dark:text-mcd-gray-400">
+                            {d.assetTag || '—'}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
               </div>
-            );
-          })}
+            </CardBody>
+          </Card>
+
+          <Card>
+            <CardHeader
+              title={
+                <span className="flex items-center gap-2">
+                  <History className="w-4 h-4 text-mcd-gray-400" /> Recent Tickets
+                </span>
+              }
+              subtitle={`${tickets.length} ticket${tickets.length === 1 ? '' : 's'} reported for this store`}
+            />
+            <CardBody className="p-0">
+              {tickets.length === 0 ? (
+                <div className="p-8 text-center text-sm text-mcd-gray-500">
+                  <div className="w-12 h-12 bg-mcd-gray-50 dark:bg-mcd-gray-800 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <History className="w-5 h-5 text-mcd-gray-300" />
+                  </div>
+                  No tickets on record yet.
+                </div>
+              ) : (
+                <ul className="divide-y divide-mcd-gray-100/50 dark:divide-mcd-gray-700/30">
+                  {tickets.map((t) => (
+                    <li key={t.id} className="p-4 hover:bg-mcd-gray-50/50 dark:hover:bg-mcd-gray-800/30 transition-colors flex items-start justify-between gap-4">
+                      <div className="min-w-0">
+                        <div className="text-sm font-medium text-mcd-gray-900 dark:text-mcd-gray-50 truncate">
+                          <span className="font-mono font-bold text-mcd-red">{t.deviceShortName}</span> <span className="text-mcd-gray-300 mx-1">·</span> {t.issue}
+                        </div>
+                        <div className="mt-1 text-[11px] text-mcd-gray-400 font-medium">
+                          <Link to="/tickets" className="hover:text-mcd-gray-600 dark:hover:text-mcd-gray-200 transition-colors">
+                            {t.id}
+                          </Link>
+                          <span className="mx-1.5">•</span>
+                          {formatDate(t.createdAt)}
+                        </div>
+                      </div>
+                      <Badge variant={t.status === 'OPEN' ? 'yellow' : 'green'}>
+                        {t.status}
+                      </Badge>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </CardBody>
+          </Card>
         </div>
+
+        <aside className="space-y-6">
+          <Card className="p-5 bg-gradient-to-br from-mcd-gray-50 to-white dark:from-mcd-gray-800/50 dark:to-mcd-gray-900/50 border-mcd-gray-200/60 shadow-sm">
+            <h3 className="font-semibold text-mcd-gray-900 dark:text-mcd-gray-50 mb-3 flex items-center gap-2">
+              <FileText className="w-4 h-4 text-mcd-gray-400" /> Notes
+            </h3>
+            <p className="text-sm text-mcd-gray-600 dark:text-mcd-gray-300 leading-relaxed">
+              {store.notes ?? 'No notes yet. Add findings from your first site visit.'}
+            </p>
+          </Card>
+
+          <Card className="p-5">
+            <h3 className="font-semibold text-mcd-gray-900 dark:text-mcd-gray-50 mb-4 flex items-center gap-2">
+              <Boxes className="w-4 h-4 text-mcd-gray-400" /> Common in this store
+            </h3>
+            <div className="space-y-2.5 text-sm">
+              {store.devices.slice(0, 6).map((d, i) => {
+                const type = deviceTypeById(d.typeId);
+                return (
+                  <div key={i} className="flex items-center justify-between gap-3 group">
+                    <span className="font-mono font-semibold text-mcd-red group-hover:text-mcd-red-dark transition-colors">
+                      {type?.shortName ?? d.typeId}
+                    </span>
+                    <span className="text-[11px] font-medium text-mcd-gray-500 dark:text-mcd-gray-400 text-right truncate">
+                      {d.location}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </Card>
+        </aside>
       </div>
     </div>
   );

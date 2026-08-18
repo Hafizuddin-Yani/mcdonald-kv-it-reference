@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160">
+  <rect x="0" y="0" width="240" height="160" rx="10" fill="#F6F5F2"/>
+  <rect x="34" y="30" width="8" height="92" fill="#A1A1AA"/>
+  <rect x="30" y="24" width="16" height="12" rx="3" fill="#52525B"/>
+  <rect x="62" y="34" width="116" height="84" rx="5" fill="#FFFFFF" stroke="#3F3F46" stroke-width="2"/>
+  <rect x="70" y="42" width="100" height="14" rx="2" fill="#DA291C"/>
+  <rect x="70" y="64" width="100" height="4" rx="2" fill="#D4D4D8"/>
+  <rect x="70" y="72" width="100" height="4" rx="2" fill="#D4D4D8"/>
+  <rect x="70" y="80" width="100" height="4" rx="2" fill="#D4D4D8"/>
+  <rect x="70" y="96" width="42" height="12" rx="2" fill="#FFC72C"/>
+  <text x="91" y="105" text-anchor="middle" font-family="monospace" font-size="8" font-weight="700" fill="#3F3F46">EXPO</text>
+  <rect x="82" y="134" width="76" height="18" rx="9" fill="#DA291C"/>
+  <text x="120" y="147" text-anchor="middle" font-family="monospace" font-size="10" font-weight="700" fill="#FFFFFF">KVS</text>
+</svg>

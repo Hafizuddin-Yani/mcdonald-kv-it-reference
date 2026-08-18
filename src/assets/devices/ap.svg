@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160">
+  <rect x="0" y="0" width="240" height="160" rx="10" fill="#F6F5F2"/>
+  <rect x="86" y="40" width="68" height="68" rx="34" fill="#FFFFFF" stroke="#3F3F46" stroke-width="2"/>
+  <circle cx="120" cy="74" r="16" fill="#E4E4E7" stroke="#3F3F46" stroke-width="1.5"/>
+  <circle cx="120" cy="74" r="7" fill="#DA291C"/>
+  <circle cx="120" cy="74" r="3" fill="#FFFFFF"/>
+  <rect x="100" y="32" width="40" height="6" rx="3" fill="#52525B"/>
+  <path d="M90 78 L66 78 M150 78 L174 78" stroke="#A1A1AA" stroke-width="3"/>
+  <circle cx="62" cy="78" r="4" fill="#A1A1AA"/>
+  <circle cx="178" cy="78" r="4" fill="#A1A1AA"/>
+  <rect x="92" y="134" width="56" height="18" rx="9" fill="#DA291C"/>
+  <text x="120" y="147" text-anchor="middle" font-family="monospace" font-size="10" font-weight="700" fill="#FFFFFF">AP</text>
+</svg>

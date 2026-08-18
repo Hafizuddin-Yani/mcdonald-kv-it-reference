@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160">
+  <rect x="0" y="0" width="240" height="160" rx="10" fill="#F6F5F2"/>
+  <rect x="72" y="54" width="96" height="62" rx="8" fill="#FFFFFF" stroke="#3F3F46" stroke-width="2"/>
+  <rect x="80" y="62" width="40" height="8" rx="2" fill="#DA291C"/>
+  <rect x="80" y="76" width="80" height="5" rx="2" fill="#A1A1AA"/>
+  <rect x="80" y="86" width="80" height="5" rx="2" fill="#A1A1AA"/>
+  <rect x="80" y="96" width="80" height="5" rx="2" fill="#A1A1AA"/>
+  <circle cx="152" cy="66" r="3" fill="#DA291C"/>
+  <path d="M120 54 L120 40 M116 46 L120 40 L124 46" stroke="#3F3F46" stroke-width="2.5" fill="none"/>
+  <circle cx="120" cy="38" r="3" fill="#A1A1AA"/>
+  <rect x="80" y="134" width="80" height="18" rx="9" fill="#DA291C"/>
+  <text x="120" y="147" text-anchor="middle" font-family="monospace" font-size="10" font-weight="700" fill="#FFFFFF">DELPHI</text>
+</svg>

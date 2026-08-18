@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160">
+  <rect x="0" y="0" width="240" height="160" rx="10" fill="#F6F5F2"/>
+  <rect x="86" y="44" width="68" height="72" rx="8" fill="#FFFFFF" stroke="#3F3F46" stroke-width="2"/>
+  <rect x="94" y="52" width="52" height="20" rx="3" fill="#E4E4E7" stroke="#3F3F46" stroke-width="1.5"/>
+  <rect x="100" y="56" width="40" height="12" rx="2" fill="#DA291C"/>
+  <g fill="#E4E4E7" stroke="#3F3F46" stroke-width="1">
+    <rect x="94" y="78" width="14" height="10" rx="2"/>
+    <rect x="112" y="78" width="14" height="10" rx="2"/>
+    <rect x="130" y="78" width="14" height="10" rx="2"/>
+    <rect x="94" y="92" width="14" height="10" rx="2"/>
+    <rect x="112" y="92" width="14" height="10" rx="2"/>
+    <rect x="130" y="92" width="14" height="10" rx="2"/>
+  </g>
+  <rect x="72" y="120" width="96" height="10" rx="4" fill="#52525B"/>
+  <rect x="94" y="110" width="52" height="12" rx="3" fill="#A1A1AA"/>
+  <rect x="92" y="134" width="56" height="18" rx="9" fill="#DA291C"/>
+  <text x="120" y="147" text-anchor="middle" font-family="monospace" font-size="10" font-weight="700" fill="#FFFFFF">MCC</text>
+</svg>

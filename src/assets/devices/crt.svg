@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160">
+  <rect x="0" y="0" width="240" height="160" rx="10" fill="#F6F5F2"/>
+  <rect x="76" y="52" width="88" height="40" rx="5" fill="#FFFFFF" stroke="#3F3F46" stroke-width="2"/>
+  <rect x="84" y="60" width="72" height="8" rx="3" fill="#DA291C"/>
+  <rect x="84" y="72" width="72" height="4" rx="2" fill="#D4D4D8"/>
+  <rect x="84" y="80" width="72" height="4" rx="2" fill="#D4D4D8"/>
+  <path d="M120 92 L120 120 M112 116 L120 124 L128 116" stroke="#3F3F46" stroke-width="3" fill="none"/>
+  <rect x="88" y="112" width="64" height="18" rx="4" fill="#52525B"/>
+  <rect x="96" y="118" width="14" height="6" rx="2" fill="#FFC72C"/>
+  <rect x="116" y="118" width="14" height="6" rx="2" fill="#FFC72C"/>
+  <rect x="136" y="118" width="14" height="6" rx="2" fill="#FFC72C"/>
+  <rect x="82" y="134" width="76" height="18" rx="9" fill="#DA291C"/>
+  <text x="120" y="147" text-anchor="middle" font-family="monospace" font-size="10" font-weight="700" fill="#FFFFFF">CASH DRAWER</text>
+</svg>

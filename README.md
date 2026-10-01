@@ -30,6 +30,9 @@ npm run preview    # preview the production build
 | `/naming` | Naming conventions + "decoder" for ticket terms |
 | `/troubleshooting` | All common issues and workarounds, searchable |
 | `/onboarding` | New engineer checklist, ticket-reading guide, golden rules |
+| `/ticket` | Ticket Assistant - paste a ticket email, get device + steps instantly |
+| `/tickets` | Ticket Log & Insights - your saved tickets, trends, SLA watch |
+| `/health` | App Health & Diagnostics - version, offline status, data checks |
 
 ## Adding Real Data
 
@@ -42,14 +45,17 @@ All data is plain TypeScript files under `src/data/` - no backend needed.
 
 ### Parsing tickets automatically
 
-Paste raw ticket emails into `src/scripts/input-tickets.txt` (separate tickets
-by any text), then run:
+Paste raw ticket emails into `src/scripts/input-tickets.txt` (each ticket
+starting with its own "SLA for this ticket is Priority ..." header), then run:
 
 ```bash
-node src/scripts/parse-tickets.mjs
+npm run parse:tickets
 ```
 
-It prints JSON you can copy into `src/data/tickets.ts`.
+It reuses the same parser as the Ticket Assistant page, scrubs reporter PII,
+and prints JSON matching the `Ticket[]` shape you can copy into
+`src/data/tickets.ts`. Fill in `createdAt`/`assignedTo` if the printed
+defaults aren't right, then run `npm run validate` before committing.
 
 ## Device Inventory Workflow (Site Visits)
 
@@ -83,5 +89,5 @@ src/
   pages/         # Dashboard, Stores, StoreDetail, Devices, DeviceDetail, ...
   types/         # Shared TypeScript types
   utils/         # Formatters and helpers
-  scripts/       # parse-tickets.mjs (ticket parser)
+  scripts/       # parse-tickets.ts (ticket parser CLI)
 ```

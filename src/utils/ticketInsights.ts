@@ -231,7 +231,12 @@ export function computeInsights(tickets: AnalyzableTicket[]) {
   };
 }
 
-/** Build scrubbed JSON (no raw emails) ready to paste into tickets.ts. */
+/**
+ * Build scrubbed JSON (no raw emails) ready to paste into tickets.ts.
+ * `assignedTo` is passed through from the saved ticket (if the engineer set
+ * one) rather than hardcoded - nobody's name should be baked in for tickets
+ * someone else worked.
+ */
 export function buildTicketsExport(saved: SavedTicket[]): string {
   const rows = saved.map((t) => ({
     id: t.id,
@@ -239,12 +244,12 @@ export function buildTicketsExport(saved: SavedTicket[]): string {
     deviceShortName: t.deviceShortName,
     issue: t.issue,
     priority: t.priority,
-    status: 'OPEN',
+    status: t.status,
     createdAt: t.createdAt,
     slaDeadline: t.slaDeadline,
     reporter: scrubReporter(),
     workaround: t.workaround,
-    assignedTo: 'Juden',
+    ...(t.assignedTo ? { assignedTo: t.assignedTo } : {}),
   }));
   return JSON.stringify(rows, null, 2);
 }
@@ -255,7 +260,11 @@ export function buildTicketsExport(saved: SavedTicket[]): string {
  */
 export function buildTicketsCsv(saved: SavedTicket[]): string {
   const esc = (v: unknown): string => {
-    const s = v == null ? '' : String(v);
+    let s = v == null ? '' : String(v);
+    // Neutralize formula injection: a cell opening with = + - @ or a tab/CR
+    // is interpreted as a live formula by Excel/Google Sheets. Prefixing
+    // with an apostrophe forces it to be read as plain text.
+    if (/^[=+\-@\t\r]/.test(s)) s = `'${s}`;
     return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
   };
   const header = [

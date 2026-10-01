@@ -12,25 +12,25 @@ import {
   Trash2,
   Server,
   ArrowRight,
-  RefreshCcw,
+  SlidersHorizontal,
 } from 'lucide-react';
 import { PageHeader } from '../components/ui/PageHeader';
 import { Card, CardHeader, CardBody } from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';
-import { Reveal } from '../components/ui/Reveal';
 import { appConfig } from '../data/config';
 import { deviceTypes } from '../data/deviceTypes';
 import { useSavedTickets } from '../hooks/useSavedTickets';
 import { useDiagnostics, clearDiagnostics } from '../utils/diagnostics';
 import { useToast } from '../hooks/useToast';
+import { useGlass, glassIntensityLabel } from '../hooks/useGlass';
 import { formatDate } from '../utils';
 
 function Stat({ label, value, sub }: { label: string; value: string | number; sub?: string }) {
   return (
-    <div className="bg-white dark:bg-mcd-gray-900 border border-mcd-gray-200 dark:border-mcd-gray-700 p-4 rounded-xl shadow-sm hover:border-mcd-red/30 transition-colors">
-      <div className="text-2xl font-bold font-mono text-mcd-gray-900 dark:text-mcd-gray-50 mb-1">{value}</div>
-      <div className="text-sm font-semibold text-mcd-gray-500 dark:text-mcd-gray-400">{label}</div>
-      {sub && <div className="text-[11px] font-medium text-mcd-gray-400 mt-1">{sub}</div>}
+    <div>
+      <div className="text-xl font-bold font-mono text-mcd-gray-900 dark:text-mcd-gray-50">{value}</div>
+      <div className="text-xs text-mcd-gray-500 dark:text-mcd-gray-400">{label}</div>
+      {sub && <div className="text-[11px] text-mcd-gray-400">{sub}</div>}
     </div>
   );
 }
@@ -39,6 +39,7 @@ export default function Health() {
   const { saved } = useSavedTickets();
   const diagnostics = useDiagnostics();
   const toast = useToast();
+  const { intensity, setIntensity } = useGlass();
 
   const [online, setOnline] = useState(navigator.onLine);
   const [storage, setStorage] = useState<{ usage?: number; quota?: number }>({});
@@ -100,185 +101,230 @@ export default function Health() {
     storage.usage !== undefined && storage.quota ? Math.min(100, Math.round((storage.usage / storage.quota) * 100)) : null;
 
   return (
-    <div className="animate-fade-up">
+    <div>
       <PageHeader
         title="App Health & Diagnostics"
         subtitle="Version, data freshness, storage, offline status and any captured errors - all computed in your browser."
       />
 
-      <div className="grid lg:grid-cols-2 gap-8">
+      <div className="grid lg:grid-cols-2 gap-6">
         {/* App & reference data */}
-        <Reveal delay={0}>
-          <Card className="h-full border-mcd-red/10 shadow-lg shadow-mcd-red/5">
-            <CardHeader
-              title={
-                <span className="flex items-center gap-2">
-                  <Database className="w-5 h-5 text-mcd-red" /> App & reference data
-                </span>
-              }
-              subtitle="The reference is compiled into this build and validated in CI on every deploy"
-            />
-            <CardBody className="bg-mcd-gray-50/30 dark:bg-mcd-gray-800/10">
-              <div className="grid grid-cols-2 gap-4">
-                <Stat label="App version" value={`v${appConfig.version}`} />
-                <Stat label="Data as of" value={formatDate(appConfig.lastDataUpdate).split(' ')[0]} />
-                <Stat label="Stores" value={appConfig.totalStores} />
-                <Stat label="Devices in inventory" value={appConfig.totalDevices} />
-                <Stat label="Device types" value={deviceTypes.length} />
-                <Stat label="Districts" value={appConfig.districts.length} />
-              </div>
-            </CardBody>
-          </Card>
-        </Reveal>
+        <Card>
+          <CardHeader
+            title={
+              <span className="flex items-center gap-2">
+                <Database className="w-4 h-4 text-mcd-red" /> App & reference data
+              </span>
+            }
+            subtitle="The reference is compiled into this build and validated in CI on every deploy"
+          />
+          <CardBody>
+            <div className="grid grid-cols-2 gap-4">
+              <Stat label="App version" value={`v${appConfig.version}`} />
+              <Stat label="Data as of" value={formatDate(appConfig.lastDataUpdate)} />
+              <Stat label="Stores" value={appConfig.totalStores} />
+              <Stat label="Devices in inventory" value={appConfig.totalDevices} />
+              <Stat label="Device types" value={deviceTypes.length} />
+              <Stat label="Districts" value={appConfig.districts.length} />
+            </div>
+          </CardBody>
+        </Card>
 
         {/* Local data */}
-        <Reveal delay={50}>
-          <Card className="h-full border-mcd-red/10 shadow-lg shadow-mcd-red/5">
-            <CardHeader
-              title={
-                <span className="flex items-center gap-2">
-                  <HardDrive className="w-5 h-5 text-mcd-red" /> Your local data
-                </span>
-              }
-              subtitle="Stored only in this browser - nothing is uploaded anywhere"
-            />
-            <CardBody className="bg-mcd-gray-50/30 dark:bg-mcd-gray-800/10">
-              <div className="grid grid-cols-2 gap-4 mb-6">
-                <Stat label="Saved tickets" value={saved.length} />
-                <Stat
-                  label="Browser storage"
-                  value={usageMb !== null ? `${usageMb} MB` : '—'}
-                  sub={quotaMb !== null ? `of ~${quotaMb} MB available` : undefined}
-                />
-              </div>
-              {storagePct !== null && (
-                <div className="bg-white dark:bg-mcd-gray-900 p-4 rounded-xl border border-mcd-gray-200 dark:border-mcd-gray-700 shadow-sm">
-                   <div className="flex justify-between text-[11px] font-bold uppercase tracking-wider text-mcd-gray-500 mb-2">
-                      <span>Storage Quota</span>
-                      <span className="font-mono">{storagePct}% used</span>
-                   </div>
-                  <div className="flex items-center gap-3">
-                    <div className="flex-1 h-3 bg-mcd-gray-100 dark:bg-mcd-gray-800 rounded-full overflow-hidden shadow-inner">
-                      <div
-                        className={`h-full rounded-full transition-all duration-1000 ease-out ${storagePct > 80 ? 'bg-mcd-red' : storagePct > 50 ? 'bg-mcd-yellow-dark' : 'bg-gradient-to-r from-mcd-red to-mcd-red-light'}`}
-                        style={{ width: `${Math.max(3, storagePct)}%` }}
-                      />
-                    </div>
-                  </div>
+        <Card>
+          <CardHeader
+            title={
+              <span className="flex items-center gap-2">
+                <HardDrive className="w-4 h-4 text-mcd-red" /> Your local data
+              </span>
+            }
+            subtitle="Stored only in this browser - nothing is uploaded anywhere"
+          />
+          <CardBody>
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              <Stat label="Saved tickets" value={saved.length} />
+              <Stat
+                label="Browser storage"
+                value={usageMb !== null ? `${usageMb} MB` : '—'}
+                sub={quotaMb !== null ? `of ~${quotaMb} MB available` : undefined}
+              />
+            </div>
+            {storagePct !== null && (
+              <div className="flex items-center gap-3">
+                <div className="flex-1 h-3 bg-mcd-gray-100 dark:bg-mcd-gray-700 rounded overflow-hidden">
+                  <div
+                    className={`h-full rounded-r transition-all ${storagePct > 80 ? 'bg-mcd-red' : storagePct > 50 ? 'bg-mcd-yellow-dark' : 'bg-mcd-red/70'}`}
+                    style={{ width: `${Math.max(3, storagePct)}%` }}
+                  />
                 </div>
-              )}
-              <p className="mt-4 text-xs font-medium text-mcd-gray-500 dark:text-mcd-gray-400 bg-mcd-gray-100 dark:bg-mcd-gray-800 p-3 rounded-lg text-center">
-                Export your log to JSON / CSV from the Ticket Log page to keep a backup.
-              </p>
-            </CardBody>
-          </Card>
-        </Reveal>
+                <span className="text-xs font-mono text-mcd-gray-500 dark:text-mcd-gray-400">{storagePct}%</span>
+              </div>
+            )}
+            <p className="mt-3 text-xs text-mcd-gray-500 dark:text-mcd-gray-400">
+              Export your log to JSON / CSV from the Ticket Log page to keep a backup.
+            </p>
+          </CardBody>
+        </Card>
 
         {/* Connectivity & PWA */}
-        <Reveal delay={100}>
-          <Card className="h-full border-mcd-red/10 shadow-lg shadow-mcd-red/5">
-            <CardHeader
-              title={
-                <span className="flex items-center gap-2">
-                  <Activity className="w-5 h-5 text-mcd-red" /> Connectivity & offline
-                </span>
-              }
-              subtitle="PWA status for field use on store networks"
-            />
-            <CardBody className="bg-mcd-gray-50/30 dark:bg-mcd-gray-800/10">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-mcd-gray-900 border border-mcd-gray-200 dark:border-mcd-gray-700 shadow-sm">
-                  <span className="text-sm font-semibold text-mcd-gray-700 dark:text-mcd-gray-200">Network</span>
-                  {online ? (
-                    <Badge variant="green" className="font-bold">
-                      <span className="inline-flex items-center gap-1.5">
-                        <Wifi className="w-3.5 h-3.5" /> Online
-                      </span>
-                    </Badge>
-                  ) : (
-                    <Badge variant="red" className="font-bold">
-                      <span className="inline-flex items-center gap-1.5">
-                        <WifiOff className="w-3.5 h-3.5" /> Offline
-                      </span>
-                    </Badge>
-                  )}
-                </div>
-                <div className="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-mcd-gray-900 border border-mcd-gray-200 dark:border-mcd-gray-700 shadow-sm">
-                  <span className="text-sm font-semibold text-mcd-gray-700 dark:text-mcd-gray-200">Service worker</span>
-                  <Badge variant={swState === 'ready' ? 'green' : swState === 'checking' ? 'yellow' : 'gray'} className="font-bold uppercase tracking-wider text-[10px]">
-                    {swState === 'ready' ? (
-                       <span className="flex items-center gap-1"><RefreshCcw className="w-3 h-3" /> Registered</span>
-                    ) : swState === 'checking' ? 'Checking' : swState === 'unsupported' ? 'Unsupported' : 'Not registered'}
-                  </Badge>
-                </div>
-                <div className="flex items-center justify-between p-3 rounded-xl bg-white dark:bg-mcd-gray-900 border border-mcd-gray-200 dark:border-mcd-gray-700 shadow-sm">
-                  <span className="text-sm font-semibold text-mcd-gray-700 dark:text-mcd-gray-200">Offline-ready</span>
-                  {hasController ? (
-                    <Badge variant="green" className="font-bold">
-                      <span className="inline-flex items-center gap-1.5">
-                        <ShieldCheck className="w-3.5 h-3.5" /> Cached for offline
-                      </span>
-                    </Badge>
-                  ) : (
-                    <Badge variant="gray" className="font-bold">
-                      <span className="inline-flex items-center gap-1.5">
-                        <ShieldOff className="w-3.5 h-3.5" /> First load only
-                      </span>
-                    </Badge>
-                  )}
-                </div>
-              </div>
-              <p className="mt-5 text-sm font-medium text-mcd-gray-600 dark:text-mcd-gray-400 leading-relaxed text-center px-4">
-                Once the app has loaded online once, it keeps working from cache - even on a store
-                network with no internet. Saved tickets always stay local.
-              </p>
-            </CardBody>
-          </Card>
-        </Reveal>
+        <Card>
+          <CardHeader
+            title={
+              <span className="flex items-center gap-2">
+                <Activity className="w-4 h-4 text-mcd-red" /> Connectivity & offline
+              </span>
+            }
+            subtitle="PWA status for field use on store networks"
+          />
+          <CardBody className="space-y-3">
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-mcd-gray-600 dark:text-mcd-gray-300">Network</span>
+              {online ? (
+                <Badge variant="green">
+                  <span className="inline-flex items-center gap-1">
+                    <Wifi className="w-3 h-3" /> Online
+                  </span>
+                </Badge>
+              ) : (
+                <Badge variant="red">
+                  <span className="inline-flex items-center gap-1">
+                    <WifiOff className="w-3 h-3" /> Offline
+                  </span>
+                </Badge>
+              )}
+            </div>
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-mcd-gray-600 dark:text-mcd-gray-300">Service worker</span>
+              <Badge variant={swState === 'ready' ? 'green' : swState === 'checking' ? 'yellow' : 'gray'}>
+                {swState === 'ready' ? 'Registered' : swState === 'checking' ? 'Checking' : swState === 'unsupported' ? 'Unsupported' : 'Not registered'}
+              </Badge>
+            </div>
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-mcd-gray-600 dark:text-mcd-gray-300">Offline-ready</span>
+              {hasController ? (
+                <Badge variant="green">
+                  <span className="inline-flex items-center gap-1">
+                    <ShieldCheck className="w-3 h-3" /> Cached for offline
+                  </span>
+                </Badge>
+              ) : (
+                <Badge variant="gray">
+                  <span className="inline-flex items-center gap-1">
+                    <ShieldOff className="w-3 h-3" /> First load only
+                  </span>
+                </Badge>
+              )}
+            </div>
+            <p className="text-xs text-mcd-gray-500 dark:text-mcd-gray-400">
+              Once the app has loaded online once, it keeps working from cache - even on a store
+              network with no internet. Saved tickets always stay local.
+            </p>
+          </CardBody>
+        </Card>
 
         {/* Backend readiness */}
-        <Reveal delay={150}>
-          <Card className="h-full border-mcd-yellow/30 shadow-lg shadow-mcd-yellow/5 bg-gradient-to-br from-mcd-yellow/[0.05] to-transparent">
-            <CardHeader
-              title={
-                <span className="flex items-center gap-2 font-bold text-mcd-yellow-dark">
-                  <Server className="w-5 h-5" /> Backend roadmap
-                </span>
-              }
-              subtitle="This app is fully client-side today - here is what a real backend would unlock"
-            />
-            <CardBody>
-              <ul className="space-y-4 text-sm font-medium text-mcd-gray-800 dark:text-mcd-gray-100 mb-6">
-                <li className="flex items-start gap-3 bg-white/60 dark:bg-black/20 p-3 rounded-xl border border-mcd-yellow/20">
-                  <span className="w-6 h-6 rounded-full bg-mcd-yellow/20 text-mcd-yellow-dark flex items-center justify-center shrink-0 mt-0.5"><Server className="w-3.5 h-3.5"/></span>
-                  <span className="leading-relaxed">Share one ticket log across every engineer (no more local-only)</span>
-                </li>
-                <li className="flex items-start gap-3 bg-white/60 dark:bg-black/20 p-3 rounded-xl border border-mcd-yellow/20">
-                  <span className="w-6 h-6 rounded-full bg-mcd-yellow/20 text-mcd-yellow-dark flex items-center justify-center shrink-0 mt-0.5"><ShieldCheck className="w-3.5 h-3.5"/></span>
-                  <span className="leading-relaxed">Server-side validation + PII enforcement (defence in depth, not just the build check)</span>
-                </li>
-                 <li className="flex items-start gap-3 bg-white/60 dark:bg-black/20 p-3 rounded-xl border border-mcd-yellow/20">
-                  <span className="w-6 h-6 rounded-full bg-mcd-yellow/20 text-mcd-yellow-dark flex items-center justify-center shrink-0 mt-0.5"><Activity className="w-3.5 h-3.5"/></span>
-                  <span className="leading-relaxed">Push alerts for SLA breaches and live device status instead of static data</span>
-                </li>
-              </ul>
-              <p className="text-sm font-semibold text-mcd-yellow-dark/80 dark:text-mcd-yellow-dark text-center">
-                A managed Postgres (Supabase / Neon) or serverless API (Cloudflare / Vercel) fits this
-                app without moving off GitHub Pages for the UI.
-              </p>
-            </CardBody>
-          </Card>
-        </Reveal>
+        <Card className="border-mcd-yellow/30 bg-mcd-yellow/5">
+          <CardHeader
+            title={
+              <span className="flex items-center gap-2">
+                <Server className="w-4 h-4 text-mcd-yellow-dark" /> Backend roadmap
+              </span>
+            }
+            subtitle="This app is fully client-side today - here is what a real backend would unlock"
+          />
+          <CardBody>
+            <ul className="space-y-2 text-sm text-mcd-gray-700 dark:text-mcd-gray-200">
+              <li className="flex items-start gap-2">
+                <span className="font-mono text-mcd-yellow-dark">•</span> Share one ticket log across every engineer (no more local-only)
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="font-mono text-mcd-yellow-dark">•</span> Server-side validation + PII enforcement (defence in depth, not just the build check)
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="font-mono text-mcd-yellow-dark">•</span> Role-based auth (viewer vs editor) and an audit trail of who changed what
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="font-mono text-mcd-yellow-dark">•</span> Push alerts for SLA breaches and live device status instead of static data
+              </li>
+            </ul>
+            <p className="mt-3 text-xs text-mcd-gray-500 dark:text-mcd-gray-400">
+              A managed Postgres (Supabase / Neon) or serverless API (Cloudflare / Vercel) fits this
+              app without moving off GitHub Pages for the UI.
+            </p>
+          </CardBody>
+        </Card>
+
+        {/* Glassmorphism settings */}
+        <Card>
+          <CardHeader
+            title={
+              <span className="flex items-center gap-2">
+                <SlidersHorizontal className="w-4 h-4 text-mcd-red" /> Glassmorphism
+              </span>
+            }
+            subtitle="Adjust backdrop blur intensity and surface opacity. Changes apply instantly and persist."
+          />
+          <CardBody className="space-y-4">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="font-medium text-mcd-gray-900 dark:text-mcd-gray-50">Blur Intensity</div>
+                  <div className="text-xs text-mcd-gray-500 dark:text-mcd-gray-400">{glassIntensityLabel(intensity)}</div>
+                </div>
+                <select
+                  value={intensity}
+                  onChange={(e) => setIntensity(e.target.value as any)}
+                  className="glass-input px-3 py-2 rounded-lg text-sm font-medium min-w-[180px]"
+                >
+                  <option value="subtle">Subtle (8px)</option>
+                  <option value="standard">Standard (20px)</option>
+                  <option value="strong">Strong (40px) — macOS-like</option>
+                  <option value="maximum">Maximum (60px)</option>
+                </select>
+              </div>
+              <div className="flex items-center gap-3">
+                <SlidersHorizontal className="w-5 h-5 text-mcd-gray-400" />
+                <div className="flex-1">
+                  <div className="text-xs text-mcd-gray-500 dark:text-mcd-gray-400 mb-1">
+                    Higher values = more frosted glass, stronger separation from background
+                  </div>
+                  <div className="flex gap-1" role="radiogroup" aria-label="Glass intensity">
+                    {(['subtle', 'standard', 'strong', 'maximum'] as const).map((level) => (
+                      <button
+                        key={level}
+                        onClick={() => setIntensity(level)}
+                        className={`flex-1 h-8 rounded-lg border-2 transition-all ${
+                          intensity === level
+                            ? 'border-mcd-red bg-mcd-red/10 dark:bg-mcd-red/20'
+                            : 'border-mcd-gray-200 dark:border-mcd-gray-700 hover:border-mcd-gray-300'
+                        }`}
+                        role="radio"
+                        aria-checked={intensity === level}
+                      >
+                        <span className="block text-center text-xs font-medium">
+                          {level.charAt(0).toUpperCase() + level.slice(1)}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="pt-3 border-t border-mcd-gray-100 dark:border-mcd-gray-700">
+              <div className="text-xs text-mcd-gray-500 dark:text-mcd-gray-400 space-y-1">
+                <p>Changes are saved to localStorage and persist across sessions.</p>
+                <p className="font-mono">CSS Variables: --glass-blur, --glass-bg-opacity, --glass-bg-strong-opacity</p>
+              </div>
+            </div>
+          </CardBody>
+        </Card>
       </div>
 
       {/* Diagnostics */}
-      <section className="mt-12 animate-fade-up" style={{ animationDelay: '200ms' }}>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="section-title flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-mcd-red/10 flex items-center justify-center">
-               <Bug className="w-4 h-4 text-mcd-red" />
-            </div>
-            Captured errors
+      <section className="mt-8">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="section-title">
+            <Bug className="w-4 h-4 text-mcd-red" /> Captured errors
           </h2>
           {diagnostics.length > 0 && (
             <button
@@ -286,41 +332,39 @@ export default function Health() {
                 clearDiagnostics();
                 toast({ title: 'Diagnostics log cleared', variant: 'info' });
               }}
-              className="btn-ghost text-sm font-bold text-mcd-red hover:bg-mcd-red/10"
+              className="btn-ghost text-xs text-mcd-red"
             >
-              <Trash2 className="w-4 h-4 mr-1.5" /> Clear log
+              <Trash2 className="w-3.5 h-3.5" /> Clear log
             </button>
           )}
         </div>
-        <Card className="border-mcd-red/10 shadow-md">
+        <Card>
           {diagnostics.length === 0 ? (
-            <CardBody className="p-8 text-center bg-mcd-gray-50/50 dark:bg-mcd-gray-800/30">
-              <div className="w-12 h-12 bg-white dark:bg-mcd-gray-900 rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm border border-mcd-gray-200 dark:border-mcd-gray-700">
-                 <ShieldCheck className="w-6 h-6 text-accent-green" />
-              </div>
-              <p className="text-sm font-medium text-mcd-gray-600 dark:text-mcd-gray-400 max-w-md mx-auto leading-relaxed">
+            <CardBody>
+              <div className="flex items-center gap-2 text-sm text-mcd-gray-500 dark:text-mcd-gray-400">
+                <ShieldCheck className="w-4 h-4 text-green-600 dark:text-green-400" />
                 No errors captured. Uncaught exceptions, failed promises and render failures will
                 appear here automatically.
-              </p>
+              </div>
             </CardBody>
           ) : (
-            <ul className="divide-y divide-mcd-gray-100 dark:divide-mcd-gray-800 bg-mcd-gray-50/30 dark:bg-mcd-gray-900/50">
+            <ul className="divide-y divide-mcd-gray-100 dark:divide-mcd-gray-700">
               {diagnostics.map((d, i) => (
-                <li key={`${d.at}-${i}`} className="px-6 py-4">
-                  <div className="flex items-start justify-between gap-4">
+                <li key={`${d.at}-${i}`} className="px-5 py-3">
+                  <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <div className="flex items-center gap-3 flex-wrap mb-2">
-                        <Badge variant={d.type === 'error' ? 'red' : d.type === 'rejection' ? 'yellow' : 'gray'} className="font-bold">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <Badge variant={d.type === 'error' ? 'red' : d.type === 'rejection' ? 'yellow' : 'gray'}>
                           {d.type}
                         </Badge>
-                        <span className="text-sm font-bold text-mcd-gray-900 dark:text-mcd-gray-50 break-words font-mono">
+                        <span className="text-sm font-medium text-mcd-gray-900 dark:text-mcd-gray-50 break-words">
                           {d.message}
                         </span>
                       </div>
-                      <div className="text-xs font-medium text-mcd-gray-500 dark:text-mcd-gray-400 break-words flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
-                        <span className="flex items-center gap-1"><Activity className="w-3 h-3" /> {new Date(d.at).toLocaleString('en-MY')}</span>
-                        {d.source && <span className="font-mono bg-white dark:bg-mcd-gray-800 px-1.5 py-0.5 rounded shadow-sm border border-mcd-gray-200 dark:border-mcd-gray-700">src: {d.source}</span>}
-                        {d.url && <span className="font-mono bg-white dark:bg-mcd-gray-800 px-1.5 py-0.5 rounded shadow-sm border border-mcd-gray-200 dark:border-mcd-gray-700 overflow-hidden text-ellipsis whitespace-nowrap max-w-[200px]">url: {d.url}</span>}
+                      <div className="mt-1 text-xs text-mcd-gray-400 break-words">
+                        {new Date(d.at).toLocaleString('en-MY')}
+                        {d.source && <span className="font-mono"> · {d.source}</span>}
+                        {d.url && <span className="font-mono"> · {d.url}</span>}
                       </div>
                     </div>
                   </div>
@@ -329,9 +373,9 @@ export default function Health() {
             </ul>
           )}
         </Card>
-        <div className="mt-6">
-          <Link to="/" className="inline-flex items-center gap-1.5 text-sm font-bold text-mcd-red hover:text-mcd-red-dark transition-colors group px-4 py-2 rounded-xl bg-mcd-red/5 hover:bg-mcd-red/10">
-            Back to dashboard <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+        <div className="mt-4">
+          <Link to="/" className="inline-flex items-center gap-1 text-sm text-mcd-red hover:underline">
+            Back to dashboard <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
       </section>

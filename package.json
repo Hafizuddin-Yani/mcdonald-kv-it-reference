@@ -9,6 +9,7 @@
     "lint": "oxlint",
     "test:parser": "node --experimental-strip-types --no-warnings --experimental-loader ./scripts/svg-loader.mjs ./scripts/parser-tests.ts",
     "validate": "node --experimental-strip-types --no-warnings --experimental-loader ./scripts/svg-loader.mjs ./scripts/validate-tickets.ts",
+    "parse:tickets": "node --experimental-strip-types --no-warnings --experimental-loader ./scripts/svg-loader.mjs ./src/scripts/parse-tickets.ts",
     "gen:icons": "node scripts/gen-icons.mjs",
     "preview": "vite preview"
   },

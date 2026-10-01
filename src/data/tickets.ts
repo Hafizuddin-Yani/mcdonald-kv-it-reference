@@ -3,9 +3,11 @@ import type { Ticket } from '../types';
 /**
  * Sample tickets parsed from real email examples.
  *
- * Use these as templates. Add your own by pasting raw emails and running
- * the ticket parser script (src/scripts/parse-tickets.ts), or add rows
- * manually following the same structure.
+ * Use these as templates. Add your own by pasting raw emails into
+ * src/scripts/input-tickets.txt and running `npm run parse:tickets`
+ * (src/scripts/parse-tickets.ts), or add rows manually following the same
+ * structure. Set `assignedTo` to the engineer who actually worked the
+ * ticket - don't copy the placeholder below.
  */
 export const tickets: Ticket[] = [
   {

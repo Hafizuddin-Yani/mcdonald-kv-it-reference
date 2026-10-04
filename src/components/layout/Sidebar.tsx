@@ -46,7 +46,12 @@ export function Sidebar() {
             to={to}
             end={end}
             className={({ isActive }) =>
-              isActive ? 'nav-item-active' : 'nav-item'
+              cx(
+                'flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm font-medium transition-colors',
+                isActive
+                  ? 'bg-mcd-red/10 text-mcd-red'
+                  : 'text-mcd-gray-600 hover:bg-mcd-gray-100/80 hover:text-mcd-gray-800 dark:text-mcd-gray-400 dark:hover:bg-mcd-gray-800/60 dark:hover:text-mcd-gray-200'
+              )
             }
           >
             <Icon className={cx('w-[18px] h-[18px] transition-colors')} />

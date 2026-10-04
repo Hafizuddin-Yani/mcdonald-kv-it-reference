@@ -1,5 +1,8 @@
 import { useMemo, useState, type KeyboardEvent } from 'react';
 import { Link } from 'react-router';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 import {
   ClipboardPaste,
   Search,
@@ -54,6 +57,13 @@ Check from our side (ok ) > both screen able to remote |
 Guide user to restart cod 2 > issue persists |
 Guide user to reseat cable and delphi modem > issue persists |
 User request onsite visit for further checking |`;
+
+const ticketPin = L.divIcon({
+  className: '',
+  html: '<div style="width:14px;height:14px;border-radius:9999px;background:#DA291C;border:3px solid white;box-shadow:0 1px 4px rgba(0,0,0,0.4)"></div>',
+  iconSize: [14, 14],
+  iconAnchor: [7, 7],
+});
 
 export default function TicketAssistant() {
   const [email, setEmail] = useState('');
@@ -455,9 +465,56 @@ export default function TicketAssistant() {
                         </p>
                       </div>
                     )}
-                  </dl>
-                </CardBody>
-              </Card>
+                    </dl>
+                  </CardBody>
+                </Card>
+
+                {store && (
+                  <Card className="mt-6">
+                    <CardHeader
+                      title={
+                        <span className="flex items-center gap-2">
+                          <MapPin className="w-4 h-4 text-mcd-red" /> Store location
+                        </span>
+                      }
+                      subtitle={store.address}
+                    />
+                    <CardBody className="p-0">
+                      <div className="h-56">
+                        <MapContainer
+                          key={store.id}
+                          center={[store.coordinates.lat, store.coordinates.lng]}
+                          zoom={15}
+                          className="h-full w-full"
+                          scrollWheelZoom={false}
+                        >
+                          <TileLayer
+                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                          />
+                          <Marker
+                            position={[store.coordinates.lat, store.coordinates.lng]}
+                            icon={ticketPin}
+                          >
+                            <Popup>
+                              #{store.number} {store.name}
+                            </Popup>
+                          </Marker>
+                        </MapContainer>
+                      </div>
+                      <div className="px-6 py-3">
+                        <a
+                          href={`https://www.google.com/maps/dir/?api=1&destination=${store.coordinates.lat},${store.coordinates.lng}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-sm font-semibold text-mcd-red hover:text-mcd-red-dark transition-colors"
+                        >
+                          Navigate
+                        </a>
+                      </div>
+                    </CardBody>
+                  </Card>
+                )}
 
               {/* Unknown device -> suggest a catalog entry */}
               {unknownEntry && (

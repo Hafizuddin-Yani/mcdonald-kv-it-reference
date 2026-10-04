@@ -262,3 +262,16 @@
     pointer-events: none;
   }
 }
+
+.btn-premium {
+  @apply btn bg-mcd-red text-white;
+  @apply hover:bg-mcd-red-dark hover:shadow-[0_8px_20px_rgb(218_41_28/0.45)];
+}
+
+.card-premium {
+  @apply bg-white dark:bg-mcd-gray-800/80 rounded-2xl border border-mcd-gray-200 dark:border-mcd-gray-700/70 overflow-hidden transition-all duration-200 hover:shadow-lg hover:-translate-y-1;
+}
+
+.focus-visible-enhanced {
+  @apply focus-visible:ring-2 focus-visible:ring-mcd-red focus-visible:ring-offset-2;
+}

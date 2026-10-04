@@ -8,6 +8,7 @@ import {
   TrendingUp,
   Wrench,
   ExternalLink,
+  Navigation,
   ChevronDown,
   ChevronRight,
   FileDown,
@@ -409,6 +410,16 @@ export default function TicketLog() {
                                 </span>
                               )}
                             </dd>
+                            {storeRec && (
+                              <a
+                                href={`https://www.google.com/maps/dir/?api=1&destination=${storeRec.coordinates.lat},${storeRec.coordinates.lng}`}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="mt-3 inline-flex items-center gap-1.5 rounded-xl border border-mcd-red/30 bg-mcd-red/5 px-3 py-1.5 text-sm font-semibold text-mcd-red transition-colors hover:bg-mcd-red/10"
+                              >
+                                <Navigation className="w-4 h-4" /> Directions
+                              </a>
+                            )}
                           </div>
                           <div className="bg-white dark:bg-mcd-gray-800 p-4 rounded-xl border border-mcd-gray-200/60 dark:border-mcd-gray-700 shadow-sm">
                             <dt className="text-[11px] font-bold uppercase tracking-wider text-mcd-gray-400 mb-1">

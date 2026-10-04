@@ -1,7 +1,7 @@
 /* MY-KV IT Reference service worker.
    Network-first for the shell (so updates land quickly), cache-first for
    hashed assets and SVGs (so the app works offline after the first visit). */
-const CACHE = 'mcdkv-v1';
+const CACHE = 'mcdkv-v2';
 
 self.addEventListener('install', () => {
   self.skipWaiting();

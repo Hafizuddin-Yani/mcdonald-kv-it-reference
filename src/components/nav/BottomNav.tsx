@@ -5,6 +5,7 @@ import {
   ClipboardPaste,
   Inbox,
   Building2,
+  MapPin,
   MonitorSmartphone,
   Tags,
   Wrench,
@@ -20,6 +21,7 @@ const primaryTabs = [
   { to: '/ticket', label: 'Assistant', icon: ClipboardPaste },
   { to: '/tickets', label: 'Log', icon: Inbox },
   { to: '/stores', label: 'Stores', icon: Building2 },
+  { to: '/map', label: 'Map', icon: MapPin },
   { to: '/devices', label: 'Devices', icon: MonitorSmartphone },
 ];
 

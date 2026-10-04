@@ -3,6 +3,7 @@ import { AppLayout } from './components/layout/AppLayout';
 import { GlassProvider } from './hooks/useGlass';
 import Dashboard from './pages/Dashboard';
 import Stores from './pages/Stores';
+import StoreMap from './pages/Map';
 import StoreDetail from './pages/StoreDetail';
 import Devices from './pages/Devices';
 import DeviceDetail from './pages/DeviceDetail';
@@ -21,6 +22,7 @@ export default function App() {
           <Route element={<AppLayout />}>
             <Route index element={<Dashboard />} />
             <Route path="/stores" element={<Stores />} />
+            <Route path="/map" element={<StoreMap />} />
             <Route path="/stores/:storeId" element={<StoreDetail />} />
             <Route path="/devices" element={<Devices />} />
             <Route path="/devices/:deviceId" element={<DeviceDetail />} />

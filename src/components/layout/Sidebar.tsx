@@ -9,6 +9,7 @@ import {
   ClipboardPaste,
   Inbox,
   Activity,
+  MapPin,
 } from 'lucide-react';
 import { appConfig } from '../../data/config';
 import { formatDate } from '../../utils';
@@ -19,6 +20,7 @@ const navItems = [
   { to: '/ticket', label: 'Ticket Assistant', icon: ClipboardPaste },
   { to: '/tickets', label: 'Ticket Log', icon: Inbox },
   { to: '/stores', label: 'Stores', icon: Building2 },
+  { to: '/map', label: 'Map', icon: MapPin },
   { to: '/devices', label: 'Devices', icon: MonitorSmartphone },
   { to: '/naming', label: 'Naming', icon: Tags },
   { to: '/troubleshooting', label: 'Troubleshooting', icon: Wrench },
